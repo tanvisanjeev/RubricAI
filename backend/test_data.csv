@@ -1,0 +1,381 @@
+﻿Student,Sim A Script,Sim B Script
+1,"[Agent]: Hi there! We're going to help you practice being a consultant today. You will play the role of a junior consultant helping a small business conduct a stakeholder interview. Before we begin, has your teacher explained to you what you'll be doing today?
+
+[User]: Yep.
+
+[Agent]: Great! Have you had time to think about what you might want to ask the customer? If yes, proceed. If no, would you like to some time to think about this and then come back and start over?
+
+[User]: I've thought about it.
+
+[Agent]: You are working as a junior consultant for a small business client. I‚Äôll walk you through the situation, then you‚Äôll prepare for a stakeholder interview. Your client is the owner of Sunrise Caf√©, a neighborhood coffee shop. The client‚Äôs challenge is as follows: Sunrise Caf√© has seen a drop in repeat customers over the past few months. New customers still come in, but fewer people are returning regularly. Your task: The owner wants to better understand customer experiences so they can decide what to improve to increase customer returns. Who you‚Äôll interview: A recent customer who has visited the caf√© at least once in the past month. Note that your consulting team has told the customer that the interview should take no longer than ten minutes. So you might want to keep your eye on the time as you do the interview. Is there anything about the situation that feels unclear to you right now?
+
+[User]: It sounds good.
+
+[Agent]: Now that you understand the situation, tell me what you think makes for a good customer interview?
+
+[User]: Making sure that the interviewee feels very comfortable and is willing to share their authentic thoughts and ideas, and make sure I focus on the questions that will help us to answer the questions that the client has the most.
+
+[Agent]: What are the most important things you hope to learn from this customer to help your client?
+
+[User]: whether or not there are, whether they in themselves have been coming to the cafe less frequently in the last couple of months and a while.
+
+[Agent]: Sunrise Caf√© has seen a drop in repeat customers over the past few months. New customers still come in, but fewer people are returning regularly. Your task is to understand customer experience and identify what might be driving this. Before we move on, in your own words: What problem is the client trying to understand?
+
+[User]: while there has been a reduction of return customers.
+
+[Agent]: Now let‚Äôs think about how to approach the interview. In this situation: What makes for a strong stakeholder interview?
+
+[User]: That they're comfortable and are willing to share their authentic
+
+[Agent]: That's a great start. To build on that, a strong interview also involves asking open-ended questions that encourage detailed responses rather than simple yes or no answers. This helps uncover deeper insights and perspectives.
+
+Now, in the word editor or on your paper, please write down four questions you'd like to ask during this interview. If you need help brainstorming, please let me know. Once you have the questions ready, please let me know.
+
+[User]: I'm ready.
+
+[Agent]: Great! What is the first question you would like to ask?
+
+[User]: Have you been coming to the... Have you been coming to the cafe as often as you used to?
+
+[Agent]: Thanks for that. What's your second question?
+
+[User]: Is there a reason that you may not be coming to the cafe as often as you used to?
+
+[Agent]: Great. Two more to go!
+
+[User]: What specifically has maybe impacted, you feel has impacted your not coming to the cafe as often?
+
+[Agent]: Okay, one more question!
+
+[User]: What could happen differently?
+
+[Agent]: <Agent>Great! We‚Äôre going to move into the live interview with Jordan now. Treat this like a real stakeholder interview. You can end the interview by asking the customer if they have anything else to share. If they don't, then you can politely end the simulation and thank the customer for their time. Any questions before we begin?</Agent><Jordan>Hi there, I'm Jordan - - - nice to meet you! How's it going?</Jordan>
+
+[User]: I'm okay. How are you?
+
+[Agent]: <Jordan>I'm doing well, thanks! Just enjoying my morning. So, what's this conversation about?</Jordan>
+
+[User]: Oh, sorry. Yeah, well, the I am working for the cafe owner being a couple other of my colleagues and she has noticed that there's been a reduction in return customers and she wanted me to ask you questions as to whether as to why that may be the case.
+
+[Agent]: <Jordan>Oh, okay, yeah ‚Äî I can answer a few questions. I like Sunrise Caf√©, so I'm happy to help.</Jordan>
+
+[User]: Great. Well, have you been frequenting it as much over the last couple months as you were before the last couple months?
+
+[Agent]: <Jordan>Hmm, I'd say I've been in a couple of times in the last month, maybe two. I used to go a bit more often, but it's not like I'm actively avoiding it or anything.</Jordan>
+
+[User]: So what are you going to other cafes?
+
+[Agent]: <Jordan>Yeah, sometimes. There's another place that's just a little bit easier sometimes, you know?</Jordan>
+
+[User]: What do you mean by easier?
+
+[Agent]: <Jordan>Just the flow, I guess. I know exactly where to stand, how long it'll take, and it just feels a bit more predictable when I'm in a hurry.</Jordan>
+
+[User]: So what do you mean more predictable? What do you mean by that?
+
+[Agent]: <Jordan>Well, at the other place, I just know what to expect. At Sunrise, sometimes it feels a little less organized, and I'm not always sure how long I'll be waiting or where to go.</Jordan>
+
+[User]: What do you mean you don't know how much time it will take?
+
+[Agent]: <Jordan>It's just that sometimes the line moves quickly and other times it doesn't. It's not a huge deal, but when I'm trying to get to work, every minute counts.</Jordan>
+
+[User]: I totally understand that. If I were in a rush too, I would want to get my coffee quickly. So it sounds like sometimes you get your coffee quickly and sometimes you don't when you go to Sunrise Cafe.
+
+[User]: Is that true?
+
+[Agent]: <Jordan>Yeah, that's pretty accurate. It's not consistent, and that can be a bit frustrating when I'm on a tight schedule.</Jordan>
+
+[User]: Yeah, I can imagine that I completely understand. So but you also mentioned not just the timeliness in which you get your order, but also how to order or where to go to order. Is that true?
+
+[Agent]: <Jordan>Yes, that's right. Sometimes it's not clear where the line starts or if I should wait to be called. It's a small thing, but it adds up.</Jordan>
+
+[User]: Yeah, I can imagine. So is it not clear where to order?
+
+[Agent]: <Jordan>It's not always super clear. Like, sometimes there's a line, but then someone else just walks up to the counter and orders, and I'm not sure if I should have done that too.</Jordan>
+
+[User]: Oh, yeah, I can imagine that so having having some clarity on where the line is and where to stand and how to put in your order would be helpful, huh?
+
+[User]: Is that true?
+
+[Agent]: <Jordan>Yeah, definitely. Just knowing the process would make it smoother.</Jordan>
+
+[User]: Yeah. And is it, so you said that the time when you get your order done is very random. It's sometimes a long time and sometimes a short time. What is it that it's really busy at that time or is it independent of how busy it is?
+
+[Agent]: <Jordan>It seems a bit independent. Sometimes it's not even that busy, but things still feel a little slow or disorganized. Other times it's packed and they're super efficient.</Jordan>
+
+[User]: Hmm. Do you happen to notice if it's because of a particular employees that are working at certain times or is it just sporadic and it's hard to tell?
+
+[Agent]: <Jordan>I haven't really noticed it being about specific employees. It just seems to be more about the overall flow of things, you know?</Jordan>
+
+[User]: Mm-hmm. Yeah. When you are not served very quickly, is there anything that you're noticing or observing that could be the reason for you not getting served very quickly?
+
+[Agent]: <Jordan>Sometimes it feels like there's a bit of confusion behind the counter, or maybe they're short-staffed. It's hard to say for sure from my side of the counter.</Jordan>
+
+[User]: I gotcha. Are there other things that contribute to not wanting to, or maybe not going to the cafe as much anymore?
+
+[Agent]: <Jordan>Well, sometimes I like to sit for a bit, even just ten or fifteen minutes. The seating at Sunrise is okay, but it's not always the most comfortable or inviting.</Jordan>
+
+[User]: What do you mean? It's not uncomfortable. I mean, it's not comfortable.
+
+[Agent]: <Jordan>It's just not super cozy, I guess. The chairs are a bit hard, and it can be a little noisy. The other place I go has comfier seats and a generally more relaxed vibe.</Jordan>
+
+[User]: What do you mean by comfier seats?
+
+[Agent]: <Jordan>Just softer, more cushioned chairs. You know, the kind you can sink into a little bit and feel more relaxed.</Jordan>
+
+[User]: So they don't have that at Sunrise Cafe?
+
+[Agent]: <Jordan>Not really, no. It's more functional seating, which is fine, but not ideal if you want to linger.</Jordan>
+
+[User]: So besides the seating, what other kind of things like the decor, the atmosphere or the music or the lighting? What other things are maybe you would like to see different that would help you maybe decide to go back more often?
+
+[Agent]: <Jordan>I think just a generally more welcoming atmosphere would be nice. Sometimes it feels a little transactional, like they're busy and just want to get you through. A friendly greeting or a quick chat can make a difference.</Jordan>
+
+[User]: Yeah. Oh, so you mean the people that work there are not very friendly or didn't welcome you very much?
+
+[Agent]: <Jordan>They're not unfriendly, but it's not always super warm, if that makes sense. Like, they're efficient, but it would be nice to feel a bit more noticed as a customer.</Jordan>
+
+[User]: What would that look like?
+
+[Agent]: <Jordan>Just a simple ""good morning"" that feels genuine, or a quick acknowledgment. Nothing over the top, just something that makes you feel like they're happy to see you.</Jordan>
+
+[User]: So they don't do that now?
+
+[Agent]: <Jordan>Sometimes, but not consistently. It varies, and like I said, when I go to the other place, I always feel a bit more seen.</Jordan>
+
+[User]: If there was one other thing that would make you feel like you would like to go there more often, what other things would that be?
+
+[Agent]: <Jordan>Hmm, that's a good question. I think if the overall experience felt a bit more consistent and predictable, that would make a big difference. Less friction, more comfort.</Jordan>
+
+[User]: Less friction? What do you mean by less friction?
+
+[Agent]: <Jordan>Just meaning fewer of those little things that make you pause or feel unsure, like knowing where to stand, how long the wait will be, or if there's a comfy spot to sit.</Jordan></Jordan><Agent>Thanks. Now I‚Äôm going to ask you a few reflection questions about your interview.</Agent>
+
+[User]: Okay!
+
+[Agent]: Why did you choose the questions you asked?
+
+[User]: Well I wanted to know whether first of all I wanted to know whether he was coming to the cafe as often as he used to and then I want to ask why that might be if he wasn't.
+
+[Agent]: Were there any questions you thought about asking but didn‚Äôt? Why?
+
+[User]: Um no, I think I asked all the questions I want to ask. The most important question for me at the end was to have him, you know, offer any other things that might have caused him to not come as often as he usually did that I had not yet asked or even thought about.
+
+[Agent]: Which question or moment gave you the most useful information for your client, and why?
+
+[User]: Well, he said um I'm not sure this is exactly his words but it seemed like he was saying it was confusing um sporadic um uh that the time with which he got the coffee was um sometimes longer or less it was un it was unpredictable um and then also how he talked he mentioned like how the seating wasn't comfortable or cozy that he couldn't really spend some time there and then also the greetings that he got from the individuals like the greetings were not very friendly or there wasn't any friendly greetings um and that he mentioned that that's what he got at the other cafe
+
+[Agent]: Based on what you learned, what feels most important for the client to understand right now?
+
+[User]: that it's um confusing when to go in and to order and not sure how to go about ordering whether it was a line or not being a line he mentioned that somebody just walks up to the counter and orders and that uh the unpredictableness of being able to be served at a um an expected time was can was confusing um yeah that was super important
+
+[Agent]: If you were to interview another customer, what would you do differently?
+
+[User]: I think I might have just asked for examples. Can you give me an example of that or tell me a time when that happened or how that might have changed your experience? If X happened, how would that have changed? X, Y, or Z had happened, how would that change your experience and how would that impact your coming to the cafe more often?
+
+[Agent]: Thank you. That completes the simulation! You can click End Simulation now.","[Agent]: Hi there! We're going to help you practice being a consultant today. You will play the role of a junior consultant presenting findings and recommendations to a small business client. Before we begin, has your teacher explained to you what you'll be doing today?
+
+[User]: Yes.
+
+[Agent]: Great. Let's begin with a few questions. Tell me how you went about reviewing the summaries and key quotes to arrive at the key findings from across the information.
+
+[User]: I reviewed the summaries and the key quotes and took note of where there were commonalities across the different individuals.
+
+[Agent]: <Agent>""Tell me about how you went about arriving at two or three actions the owner could consider taking as a result of the key findings you identified.""</Agent>
+
+[User]: Well, I thought about, you know, given the commentary, many of them being around how fast they were getting the orders, a few of them talking about the ambience and feel for the space. I just thought about those are like two different areas they could the owner could think about and whether she she or he or she might want to figure out interrogate more about.
+
+[Agent]: <Agent>""How confident do you feel in the key information and findings you came up with from your review? Would you say: Not confident at all, Somewhat confident, Pretty confident, or Very confident?""</Agent>
+
+[User]: Pretty confident because it was clear across the summaries or main points and the quotes that these were the particular items that were commented on the most.
+
+[Agent]: <Agent>""Why do you say that?""</Agent>
+
+[User]: Yeah.
+
+[Agent]: <Agent>""I'm now going to switch and play the role of the cafe owner. Treat this like a real client meeting.""</Agent><Owner>""Hello. Thank you for meeting with me today. I understand you and some of your colleagues interviewed a number of my customers to try and find out why there's been a decrease in returning customers the last few months. What did you find out?""</Owner>
+
+[User]: Well, many of the customers commented on the fact that it was inconsistent on when they would actually get the order served. Some of them said it would pretty quick, and some of them said sometimes it would take a lot longer, and it wasn't clear to them why it would take a short amount of time versus a long amount of time because it didn't seem to be dependent on how busy the place was.
+
+[Agent]: <Owner>Why do you say that?</Owner>
+
+[User]: Well, a bunch of customers commented on it. In fact, one of the customers commented on it wasn't clear where to stand or how to do the ordering. And another customer commented on blah, blah, blah, blah, blah, blah. Yeah, there were a number of comments on the fact that it was unclear how fast they would get served.
+
+[Agent]: <Owner>Was there anything else that stood out to you from the interviews?</Owner>
+
+[User]: The ambience or feel for the place came up quite a bit.
+
+[Agent]: <Owner>Can you say more about that?</Owner>
+
+[User]: So, one customer commented that the seating isn't, this is a specific quote, the seating isn't really designed for staying. It's more of a grab and go setup. The lighting is bright and a bit harsh, not the cozy atmosphere I'm looking for when I work. Another customer commented, it feels like they want to get people in and out quickly. That's fine. She said that's fine for some cafes, but it's not relaxing. I think that the more you're in a cafe, the more you feel like you're getting a lot of people in and out of your cafe. But I will say that a customer commented, I actually like the modern clean aesthetic. It feels fresh and efficient. So it was kind of mixed there.
+
+[Agent]: <Owner>Do you think these are the most important things I should know? Why do you say that?</Owner>
+
+[User]: I actually think that the commentary around being able to get a cup of coffee and go in a consistent manner in terms of being able to get their coffee in an expeditious way is probably the most important thing.
+
+[Agent]: <Owner>Based on this feedback, what are two or three directions or ideas you think I should consider going forward?</Owner>
+
+[User]: I would talk with your managers and maybe even do some observations on how quickly customers are served and if there's a ramness to it. Why are, you know, are there different, are there, what might be causes for people getting served quickly versus not so quickly sometimes? What is the reason for that? Yeah, I think that would probably be the thing I would focus on the most.
+
+[Agent]: <Owner>Tell me more about that first idea.</Owner>
+
+[User]: Well, I just, I believe and I think the customers are saying that they really want to be able to be confident that when they come to the store, they're going to be served in a expeditious way because many of them are on the move trying to go to work in the morning. probably want to get served quickly. And if there's too much variation and they're not feeling like they're being served quickly, they're most likely to find another establishment to do that.
+
+[Agent]: <Owner>Why do you think that would help?</Owner>
+
+[User]: Well, if it were me, frankly, and I, you know, was supposed to be at work in 10 minutes, I would want to go to a place where I might be able to serve within two to three minutes so I can make sure I get to work on time. If it's random and sometimes I can get my coffee in two minutes, but sometimes it takes me 10 to 12 minutes and makes me late to work. I would probably not go to the establishment.
+
+[Agent]: <Owner>Did you have a third idea?</Owner>
+
+[User]: Um, one customer commented on the possibility of a, um, loyalty card. Um, they, they feel like if they do frequent it quite often, maybe they can have a punch card where if they, for example, or 10 coffees, they might get a, uh, 11th coffee for free. Um, sort of, sort of some, some signal or appreciation for their frequenting the establishment quite often.
+
+[Agent]: <Owner>Oh great! Tell me about that one.</Owner>
+
+[User]: Um, yeah, basically that was one of the ideas of the, one of the customers is a card. I even asked whether having it be a card, a physical card instead of being electronic, a system would be useful. And they said it would be really useful. It was easy to use and having something physical like a card that was punched and they can recognize and it could be well documented that they frequent the establishment, they might more likely use the, come to the establishment.
+
+[Agent]: <Owner>Why do you think that would work?</Owner>
+
+[User]: I don't know if it will work to tell you the truth, but I'm just relaying what the person said.
+
+[Agent]: <Owner>Which of the two ideas you've given me do you think would be most important for me to try first, and why?</Owner>
+
+[User]: Well, I am hedging here, but I am feeling because of the number of people who said this across all the interviewees that being able to be confident that one will be served in a timely manner is critical. And secondary would be having a nice aura or decor or feeling that they can relax and it's a comfortable space to be into, an inviting space would also contribute to one wanting to frequent the establishment.
+
+[Agent]: <Owner>If you think I should start with just one idea, which one would you recommend and why?</Owner>
+
+[User]: Getting the coffee in a timely manner.
+
+[Agent]: <Owner>What makes this the most important place to start, given the feedback?</Owner>
+
+[User]: I think it's the critical piece between deciding to come or not come.
+
+[Agent]: <Owner>""Thank you. This is very helpful.""</Owner><Agent>""Ok, I'm going to step out of the owner role now. I have a few reflection questions for you now that you've talked with the owner.""</Agent>
+
+[User]: Yep, I'm ready.
+
+[Agent]: Let's start with the presentation of findings you gave to the owner. How do you feel that went?
+
+[User]: I think it was fine. I was pretty clear on what I thought were the most important things to pay attention to, and I think I referenced a couple of the quotes and what people actually said.
+
+[Agent]: What was good about your presentation?
+
+[User]: Again, as I said, I think actually referencing what people actually said and detailing that as examples was really important. And the frequency of what people said across interviews.
+
+[Agent]: What do you think you could have done differently or better, and why do you say that?
+
+[User]: I think I could have been more organized in terms of the specific frequency of what people, you know, what things people actually commented on and relay the specific quotes for each. I don't think I did a particularly good job of that.
+
+[Agent]: Looking back at your presentation of suggestions the owner could take, how do you feel that went?
+
+[User]: I think it was fine. I think I answered her question. She asked, you know, why is this the most important thing? And I think I basically commented on my perspective on why I think being able to confidently get one's order in an expeditious way was important. But of course, I, you know, that I kind of hedged it. That was my particular bent. Although I think it's grounded in what the people said as well.
+
+[Agent]: What was good about that part?
+
+[User]: The fact that, you know, I mentioned that many of the customers commented on that.
+
+[Agent]: What do you think you could have done differently or better, and why?
+
+[User]: I think I could have been more specific about how many customers commented on what aspects and provided much more specific examples or quotes from the customers.
+
+[Agent]: Overall, how do you feel about your interaction with the owner?
+
+[User]: I think it was okay. I think I could have been more deliberate or specific about what people actually said.
+
+[Agent]: If you were to engage with the owner again, what might you do differently next time and why?
+
+[User]: I think have it organized. Like these are the top three things and here's how many people commented on it and here's some examples of exactly what they said.
+
+[Agent]: Thank you. That completes the simulation. You can click End Simulation now."
+2,"[Agent]: Hi there! We're going to help you practice being a consultant today. You will play the role of a junior consultant helping a small business conduct a stakeholder interview. Before we begin, has your teacher explained to you what you'll be doing today?
+
+[User]: Yes.
+
+[Agent]: Great! Have you had time to think about what you might want to ask the customer? If not, would you like some time to think about this and then come back and start over?
+
+[User]: No, I think I'm ready.
+
+[Agent]: You are working as a junior consultant for a small business client. I‚Äôll walk you through the situation, then you‚Äôll prepare for a stakeholder interview. Your client is the owner of Sunrise Caf√©, a neighborhood coffee shop. The client‚Äôs challenge is as follows: Sunrise Caf√© has seen a drop in repeat customers over the past few months. New customers still come in, but fewer people are returning regularly. Your task: The owner wants to better understand customer experiences so they can decide what to improve to increase customer returns. Who you‚Äôll interview: A recent customer who has visited the caf√© at least once in the past month. Note that your consulting team has told the customer that the interview should take no longer than ten minutes. So you might want to keep your eye on the time as you do the interview. Is there anything about the situation that feels unclear to you right now?
+
+[User]: No, that sounds good.
+
+[Agent]: Now that you understand the situation, tell me what you think makes for a good customer interview?
+
+[User]: Being sure to be engaging and have the person feel comfortable and ask the questions that will help me get at some potential reasons for customer drop-off.
+
+[Agent]: What are the most important things you hope to learn from this customer to help your client?
+
+[User]: Why customers may not be returning as often. And I guess instead of just surmising about having him or her surmise that, getting at what has happened with them and why they may have not been returning as often.
+
+[Agent]: Sunrise Caf√© has seen a drop in repeat customers over the past few months. New customers still come in, but fewer people are returning regularly. Your task is to understand customer experience and identify what might be driving this. Before we move on, in your own words: What problem is the client trying to understand?
+
+[User]: Why there are fewer returning customers over the last few months.
+
+[Agent]: Now let‚Äôs think about how to approach the interview. In this situation: What makes for a strong stakeholder interview?
+
+[User]: Engaging and getting the information that we need
+
+[Agent]: That's a good start. To make it even stronger, a good interview also involves active listening and asking follow-up questions to truly understand the customer's perspective and uncover deeper insights.
+
+Now, in the word editor or on your paper, please write down four questions you'd like to ask during this interview. If you need help brainstorming, please let me know. Once you have the questions ready, please let me know.
+
+[User]: I am ready for...
+
+[Agent]: Please provide your first question.
+
+[User]: Hold on...
+
+[User]: Ummm...
+
+[Agent]: Please provide your first question.
+
+[User]: What?
+
+[Agent]: Please provide your first question for the interview.
+
+[User]: Uh-uh. Have you been enjoying coming to the cafe in the last month or two?
+
+[Agent]: That's a good question to start with. How could you ask that in a way that invites a specific example or a more detailed experience rather than just a yes or no?
+
+[User]: There's too much guidance here.
+
+[Agent]: I apologize if it feels that way. My goal is to help you refine your questions to get the most out of your interview. Would you like to try rephrasing that question, or would you like to move on to your next question?","[Agent]: Hi there! We're going to help you practice being a consultant today. You will play the role of a junior consultant presenting findings and recommendations to a small business client. Before we begin, has your teacher explained to you what you'll be doing today?
+
+[User]: No, she hasn't.
+
+[Agent]: No problem at all. I can explain it to you.
+
+You'll be stepping into a simulated client meeting. I'll be playing the role of Anya, the owner of Sunrise Caf√©. Your task as the consultant is to present your findings from customer interviews and offer some recommendations to help her business.
+
+Before we jump into the meeting, I need to ask you a few questions to understand how you prepared.
+
+Does that sound clear?
+
+[User]: Yeah, that's clear.
+
+[Agent]: <Agent>Hello, thank you for taking the time to answer some questions and then role play as a consultant meeting with a client. Before we get started, you were given a summary and key quotes from five different interviews conducted by your colleagues and expected to review for them for information that you think would be most helpful to the owner and then two to three ideas of how they could potentially attend to or address what you found. Were you able to review the summaries and key quotes, identify what you thought was the most important information to share with the owner, and develop two or three ideas on what the owner could potentially do to address or attend to what you found?</Agent>
+
+[User]: No, I didn't have a chance to do that yet.
+
+[Agent]: Oh. Good to know. Would you like to stop doing this interview now and take the time to do so and then come back to this interview?
+
+[User]: No, I kind of want to just do it.
+
+[Agent]: Very good. We can continue from here as long as you have the summary and key quotes in front of you to review as we continue.
+
+Tell me how you went about reviewing the summaries and key quotes to arrive at the key findings from across the information.
+
+[User]: I didn't review anything yet, so I can't tell you that.
+
+[Agent]: <Agent>Tell me about how you went about arriving at two or three actions the owner could consider taking as a result of the key findings you identified.</Agent>
+
+[User]: I didn't.
+
+[Agent]: <Agent>How confident do you feel in the key information and findings you came up with from your review? Would you say: Not confident at all, Somewhat confident, Pretty confident, or Very confident?</Agent>
+
+[User]: Not at all confident.
+
+[Agent]: <Agent>Why do you say that?</Agent>
+
+[User]: Because I didn't have a chance to actually do this.
+
+[Agent]: <Agent>I'm now going to switch and play the role of the caf√© owner. Treat this like a real client meeting.</Agent><Owner>Hello. Thank you for meeting with me today. I understand you and some of your colleagues interviewed a number of my customers to try and find out why there's been a decrease in returning customers the last few months. What did you find out?</Owner>"
