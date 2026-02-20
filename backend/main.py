@@ -1,0 +1,42 @@
+from fastapi import FastAPI, UploadFile, File
+from fastapi.middleware.cors import CORSMiddleware
+from evaluator import evaluate_transcript
+import csv
+import io
+
+app = FastAPI(title="RubricAI")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.post("/api/evaluate")
+async def evaluate_csv(file: UploadFile = File(...)):
+    try:
+        contents = await file.read()
+        text = contents.decode('utf-8')
+        csv_reader = csv.DictReader(io.StringIO(text))
+        results = []
+        
+        for row in csv_reader:
+            student_id = row.get('Student', 'Unknown')
+            
+            if row.get('Sim A Script'):
+                result_a = evaluate_transcript(row['Sim A Script'], student_id, 'A')
+                results.append(result_a)
+            
+            if row.get('Sim B Script'):
+                result_b = evaluate_transcript(row['Sim B Script'], student_id, 'B')
+                results.append(result_b)
+        
+        return {"status": "success", "total_evaluations": len(results), "results": results}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+@app.get("/api/health")
+def health():
+    return {"status": "healthy"}

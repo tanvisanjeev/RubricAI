@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RubricAI - Student Interview Assessment</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f172a;
+            color: #f1f5f9;
+            line-height: 1.6;
+        }
+        
+        .navbar {
+            background: #1e293b;
+            border-bottom: 1px solid #334155;
+            padding: 0 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+        }
+        
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 0;
+        }
+        
+        .nav-link {
+            color: #94a3b8;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 20px 24px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        
+        .nav-link:hover {
+            color: #f1f5f9;
+            background: rgba(102, 126, 234, 0.05);
+        }
+        
+        .nav-link.active {
+            color: #f1f5f9;
+            border-bottom-color: #667eea;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 32px;
+        }
+        
+        .view {
+            display: none;
+        }
+        
+        .view.active {
+            display: block;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .page-subtitle {
+            color: #94a3b8;
+            font-size: 15px;
+            margin-bottom: 32px;
+        }
+        
+        .card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        
+        .upload-zone {
+            border: 2px dashed #334155;
+            border-radius: 8px;
+            padding: 80px 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #0f172a;
+        }
+        
+        .upload-zone:hover {
+            border-color: #667eea;
+            background: #1e293b;
+        }
+        
+        .btn {
+            padding: 12px 28px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn:hover {
+            background: #5568d3;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-secondary {
+            background: #334155;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #0f172a;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 16px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+        
+        .stat-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .stat-label {
+            color: #94a3b8;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #667eea;
+        }
+        
+        .stat-meta {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+        
+        .student-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .student-card:hover {
+            border-color: #667eea;
+        }
+        
+        .student-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .student-name {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .badge-level-1 { background: rgba(239, 68, 68, 0.15); color: #fca5a5; }
+        .badge-level-2 { background: rgba(245, 158, 11, 0.15); color: #fcd34d; }
+        .badge-level-3 { background: rgba(59, 130, 246, 0.15); color: #93c5fd; }
+        .badge-level-4 { background: rgba(16, 185, 129, 0.15); color: #6ee7b7; }
+        .badge-review { background: rgba(239, 68, 68, 0.15); color: #fca5a5; margin-left: 8px; }
+        .badge-active { background: rgba(16, 185, 129, 0.15); color: #6ee7b7; }
+        .badge-soon { background: rgba(148, 163, 184, 0.1); color: #94a3b8; }
+        
+        .student-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+        
+        .detail-value {
+            color: #f1f5f9;
+            font-weight: 600;
+        }
+        
+        .eval-details {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #334155;
+            display: none;
+        }
+        
+        .eval-details.show {
+            display: block;
+        }
+        
+        .eval-card {
+            background: #0f172a;
+            border: 1px solid #334155;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .eval-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin: 16px 0;
+        }
+        
+        .metric-box {
+            text-align: center;
+            padding: 12px;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 6px;
+        }
+        
+        .metric-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #667eea;
+        }
+        
+        .metric-label {
+            font-size: 11px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+        
+        .evidence-section {
+            margin: 16px 0;
+            padding: 14px;
+            background: #1e293b;
+            border-left: 2px solid #667eea;
+            border-radius: 4px;
+        }
+        
+        .section-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        
+        .section-content {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+        
+        .example-list {
+            list-style: none;
+            margin-top: 8px;
+        }
+        
+        .example-list li {
+            padding: 8px 12px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 4px;
+            margin-bottom: 6px;
+            font-size: 13px;
+            color: #94a3b8;
+        }
+        
+        .indicator-item {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            padding: 16px 20px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .indicator-number {
+            font-size: 11px;
+            color: #94a3b8;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .indicator-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .cluster-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #94a3b8;
+            text-transform: uppercase;
+            margin: 20px 0 12px 0;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #334155;
+            margin-bottom: 24px;
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            color: #94a3b8;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .tab:hover {
+            color: #f1f5f9;
+        }
+        
+        .tab.active {
+            color: #f1f5f9;
+            border-bottom-color: #667eea;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">RubricAI</div>
+        <div class="nav-links">
+            <span class="nav-link active" onclick="showView('upload')">Upload & Evaluate</span>
+            <span class="nav-link" onclick="showView('students')">Students</span>
+            <span class="nav-link" onclick="showView('framework')">Rubric Framework</span>
+            <span class="nav-link" onclick="showView('about')">About</span>
+        </div>
+    </nav>
+
+    <!-- UPLOAD VIEW -->
+    <div id="uploadView" class="view active">
+        <div class="container">
+            <div class="page-title">Upload Interview Transcripts</div>
+            <div class="page-subtitle">Process student interviews with AI-powered rubric evaluation</div>
+
+            <div class="card">
+                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px;">CSV Upload</h3>
+                <p style="color: #94a3b8; margin-bottom: 20px;">
+                    Upload interview transcript CSV. Required columns: Student, Sim A Script, Sim B Script
+                </p>
+                
+                <div class="upload-zone" id="dropZone">
+                    <div style="font-size: 48px; margin-bottom: 16px; opacity: 0.5;">📄</div>
+                    <div style="font-size: 18px; margin-bottom: 8px; font-weight: 500;">
+                        Drop CSV file here or click to browse
+                    </div>
+                    <div style="color: #94a3b8; font-size: 14px;">
+                        Evaluates Indicator 1: "Asks clear, open-ended questions"
+                    </div>
+                    <input type="file" id="fileInput" accept=".csv" style="display:none">
+                </div>
+                
+                <div style="text-align: center;">
+                    <button class="btn" id="uploadBtn" disabled onclick="processUpload()">
+                        Start AI Evaluation
+                    </button>
+                    <button class="btn btn-secondary" onclick="loadDemoData()" style="margin-left: 12px;">
+                        Load Demo Data
+                    </button>
+                </div>
+                
+                <div id="progressSection" style="display: none; margin-top: 24px;">
+                    <div style="font-size: 14px; margin-bottom: 8px; color: #94a3b8;">
+                        Processing: <span id="progressText">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div id="progressStatus" style="font-size: 13px; color: #94a3b8; margin-top: 8px;">
+                        Analyzing transcripts...
+                    </div>
+                </div>
+                
+                <div id="statusMsg" style="margin-top: 16px;"></div>
+            </div>
+
+            <div class="card">
+                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 12px;">Automated Evaluation Workflow</h3>
+                <ol style="color: #94a3b8; line-height: 1.8; margin-left: 20px; font-size: 14px;">
+                    <li>Parse CSV and extract student interview transcripts</li>
+                    <li>Identify student questions using NLP pattern matching</li>
+                    <li>Classify questions (open-ended vs. closed)</li>
+                    <li>Evaluate against Level 1-4 rubric criteria with Groq AI</li>
+                    <li>Extract evidence and generate justifications</li>
+                    <li>Display student-specific analytics with override capability</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- STUDENTS VIEW -->
+    <div id="studentsView" class="view">
+        <div class="container">
+            <div class="page-title">Student Performance Assessments</div>
+            <div class="page-subtitle">Review AI-generated evaluations against communication rubrics</div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Students</div>
+                    <div class="stat-value" id="statStudents">0</div>
+                    <div class="stat-meta">Evaluated</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Evaluations</div>
+                    <div class="stat-value" id="statEvals">0</div>
+                    <div class="stat-meta">Completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Average Performance</div>
+                    <div class="stat-value" id="statAvg">0.0</div>
+                    <div class="stat-meta">Overall level</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Needs Review</div>
+                    <div class="stat-value" id="statReview">0</div>
+                    <div class="stat-meta">Flagged</div>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <button class="btn btn-secondary" onclick="showView('upload')">
+                    ← Upload New File
+                </button>
+            </div>
+
+            <div id="studentsList"></div>
+        </div>
+    </div>
+
+    <!-- STUDENT PROFILE VIEW -->
+    <div id="profileView" class="view">
+        <div class="container">
+            <div style="margin-bottom: 24px;">
+                <span style="color: #94a3b8; font-size: 13px; cursor: pointer;" onclick="showView('students')">
+                    ← Back to Students
+                </span>
+            </div>
+            
+            <div class="page-title" id="profileName">Student Profile</div>
+            <div class="page-subtitle" id="profileMeta">Student Details</div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Interviews</div>
+                    <div class="stat-value" id="profileInterviews">0</div>
+                    <div class="stat-meta">of 4 total</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Overall</div>
+                    <div class="stat-value" id="profileOverall">0.0</div>
+                    <div class="stat-meta">Average level</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Communication</div>
+                    <div class="stat-value" id="profileComm">0.0</div>
+                    <div class="stat-meta">1 of 10 active</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Status</div>
+                    <div class="stat-value" style="font-size: 18px;" id="profileStatus">-</div>
+                    <div class="stat-meta" id="profileReview"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px;">Interview Evaluations</h3>
+                <div id="profileEvaluations"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FRAMEWORK VIEW -->
+    <div id="frameworkView" class="view">
+        <div class="container">
+            <div class="page-title">Rubric Framework</div>
+            <div class="page-subtitle">34 research-backed behavioral indicators across three assessment domains</div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Indicators</div>
+                    <div class="stat-value">34</div>
+                    <div class="stat-meta">3 domains, 9 clusters</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Active Now</div>
+                    <div class="stat-value">1</div>
+                    <div class="stat-meta">Communication</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">In Development</div>
+                    <div class="stat-value">33</div>
+                    <div class="stat-meta">Phases 2-4</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Levels</div>
+                    <div class="stat-value">4</div>
+                    <div class="stat-meta">Per indicator</div>
+                </div>
+            </div>
+
+            <div class="tabs">
+                <div class="tab active" onclick="showDomain('comm')">Communication (10)</div>
+                <div class="tab" onclick="showDomain('crit')">Critical Thinking (12)</div>
+                <div class="tab" onclick="showDomain('prof')">Professional Agency (12)</div>
+            </div>
+
+            <div id="commDomain" class="tab-content active">
+                <div class="cluster-title">Interview Communication (6 indicators)</div>
+                <div class="indicator-item" style="background: rgba(102, 126, 234, 0.05); border-color: #667eea;">
+                    <div>
+                        <div class="indicator-number">Indicator 1</div>
+                        <div class="indicator-name">Asks clear, open-ended questions</div>
+                    </div>
+                    <span class="badge badge-active">Active</span>
+                </div>
+                <div class="indicator-item">
+                    <div>
+                        <div class="indicator-number">Indicator 2</div>
+                        <div class="indicator-name">Uses follow-up questions to probe deeper</div>
+                    </div>
+                    <span class="badge badge-soon">Phase 2</span>
+                </div>
+                <div class="indicator-item">
+                    <div>
+                        <div class="indicator-number">Indicator 3</div>
+                        <div class="indicator-name">Demonstrates active listening</div>
+                    </div>
+                    <span class="badge badge-soon">Phase 2</span>
+                </div>
+                <div class="indicator-item">
+                    <div>
+                        <div class="indicator-number">Indicator 4</div>
+                        <div class="indicator-name">Adjusts communication style</div>
+                    </div>
+                    <span class="badge badge-soon">Phase 2</span>
+                </div>
+                <div class="indicator-item">
+                    <div>
+                        <div class="indicator-number">Indicator 5</div>
+                        <div class="indicator-name">Introduces self professionally</div>
+                    </div>
+                    <span class="badge badge-soon">Phase 2</span>
+                </div>
+                <div class="indicator-item">
+                    <div>
+                        <div class="indicator-number">Indicator 6</div>
+                        <div class="indicator-name">Builds rapport with stakeholders</div>
+                    </div>
+                    <span class="badge badge-soon">Phase 2</span>
+                </div>
+
+                <div class="cluster-title">Communicating Ideas (4 indicators)</div>
+                <div class="indicator-item">
+                    <div>
+                        <div class="indicator-number">Indicator 7</div>
+                        <div class="indicator-name">Organizes ideas logically</div>
+                    </div>
+                    <span class="badge badge-soon">Phase 2</span>
+                </div>
+                <div class="indicator-item">
+                    <div>
+                        <div class="indicator-number">Indicator 8</div>
+                        <div class="indicator-name">Connects claims to evidence</div>
+                    </div>
+                    <span class="badge badge-soon">Phase 2</span>
+                </div>
+                <div class="indicator-item">
+                    <div>
+                        <div class="indicator-number">Indicator 9</div>
+                        <div class="indicator-name">Uses clear, professional tone</div>
+                    </div>
+                    <span class="badge badge-soon">Phase 2</span>
+                </div>
+                <div class="indicator-item">
+                    <div>
+                        <div class="indicator-number">Indicator 10</div>
+                        <div class="indicator-name">Adapts message for audiences</div>
+                    </div>
+                    <span class="badge badge-soon">Phase 2</span>
+                </div>
+            </div>
+
+            <div id="critDomain" class="tab-content">
+                <div class="cluster-title">Information Analysis (4)</div>
+                <div class="indicator-item"><div><div class="indicator-number">Indicator 11</div><div class="indicator-name">Asks targeted questions</div></div><span class="badge badge-soon">Phase 3</span></div>
+                <div class="indicator-item"><div><div class="indicator-number">Indicator 12</div><div class="indicator-name">Identifies gaps</div></div><span class="badge badge-soon">Phase 3</span></div>
+                <div class="indicator-item"><div><div class="indicator-number">Indicator 13</div><div class="indicator-name">Evaluates information</div></div><span class="badge badge-soon">Phase 3</span></div>
+                <div class="indicator-item"><div><div class="indicator-number">Indicator 14</div><div class="indicator-name">Breaks down problems</div></div><span class="badge badge-soon">Phase 3</span></div>
+                
+                <div class="cluster-title">Insight Synthesis (4)</div>
+                <div class="indicator-item"><div><div class="indicator-number">Indicator 15</div><div class="indicator-name">Identifies relationships</div></div><span class="badge badge-soon">Phase 3</span></div>
+                <div class="indicator-item"><div><div class="indicator-number">Indicator 16</div><div class="indicator-name">Recognizes patterns</div></div><span class="badge badge-soon">Phase 3</span></div>
+                <div class="indicator-item"><div><div class="indicator-number">Indicator 17</div><div class="indicator-name">Synthesizes evidence</div></div><span class="badge badge-soon">Phase 3</span></div>
+                <div class="indicator-item"><div><div class="indicator-number">Indicator 18</div><div class="indicator-name">Organizes insights</div></div><span class="badge badge-soon">Phase 3</span></div>
+                
+                <div class="cluster-title">Decision Framing (4)</div>
+                <div class="indicator-item"><div><div class="indicator-number">Indicator 19</div><div class="indicator-name">Frames decisions</div></div><span class="badge badge-soon">Phase 3</span></div>
+                <div class="indicator-item"><div><div class="indicator-number">Indicator 20</div><div class="indicator-name">Connects to evidence</div></div><span class="badge badge-soon">Phase 3</span></div>
+                <div class="indicator-item"><div><div class="indicator-number">Indicator 21</div><div class="indicator-name">Addresses uncertainty</div></div><span class="badge badge-soon">Phase 3</span></div>
+                <div class="indicator-item"><div><div class="indicator-number">Indicator 22</div><div class="indicator-name">Provides recommendations</div></div><span class="badge badge-soon">Phase 3</span></div>
+            </div>
+
+            <div id="profDomain" class="tab-content">
+                <div class="cluster-title">Self-Efficacy (4)</div>
+                <div class="indicator-item"><div><div class="indicator-number">Indicator 23</div><div class="indicator-name">Communicates with clarity</div></div><span class="badge badge-soon">Phase 4</span></div>
+                <div class="indicator-item"><div><div class="indicator-number">Indicator 24</div><div class="indicator-name">Seeks clarification</div></div><span class="badge badge-soon">Phase 4</span></div>
+                <div class="indicator-item"><div><div class="indicator-number">Indicator 25</div><div class="indicator-name">Demonstrates composure</div></div><span class="badge badge-soon">Phase 4</span></div>
+                <div class="indicator-item"><div><div class="indicator-number">Indicator 26</div><div class="indicator-name">Calibrated confidence</div></div><span class="badge badge-soon">Phase 4</span></div>
+                
+                <div class="cluster-title">Initiative (4)</div>
+                <div class="indicator-item"><div><div class="indicator-number">Indicator 27</div><div class="indicator-name">Begins independently</div></div><span class="badge badge-soon">Phase 4</span></div>
+                <div class="indicator-item"><div><div class="indicator-number">Indicator 28</div><div class="indicator-name">Takes action</div></div><span class="badge badge-soon">Phase 4</span></div>
+                <div class="indicator-item"><div><div class="indicator-number">Indicator 29</div><div class="indicator-name">Identifies resources</div></div><span class="badge badge-soon">Phase 4</span></div>
+                <div class="indicator-item"><div><div class="indicator-number">Indicator 30</div><div class="indicator-name">Demonstrates persistence</div></div><span class="badge badge-soon">Phase 4</span></div>
+                
+                <div class="cluster-title">Growth Mindset (4)</div>
+                <div class="indicator-item"><div><div class="indicator-number">Indicator 31</div><div class="indicator-name">Interprets feedback</div></div><span class="badge badge-soon">Phase 4</span></div>
+                <div class="indicator-item"><div><div class="indicator-number">Indicator 32</div><div class="indicator-name">Reflects on learning</div></div><span class="badge badge-soon">Phase 4</span></div>
+                <div class="indicator-item"><div><div class="indicator-number">Indicator 33</div><div class="indicator-name">Responds to setbacks</div></div><span class="badge badge-soon">Phase 4</span></div>
+                <div class="indicator-item"><div><div class="indicator-number">Indicator 34</div><div class="indicator-name">Demonstrates experimentation</div></div><span class="badge badge-soon">Phase 4</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ABOUT VIEW -->
+    <div id="aboutView" class="view">
+        <div class="container">
+            <div class="page-title">About RubricAI</div>
+            <div class="page-subtitle">AI-powered rubric evaluation system for educational research</div>
+
+            <div class="card">
+                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px;">Project Overview</h3>
+                <p style="line-height: 1.7; color: #cbd5e1; margin-bottom: 16px;">
+                    RubricAI evaluates student interview performance against research-backed behavioral rubrics.
+                    Developed for CPS LEARN Lab at Northeastern University to assess 300 students across
+                    4 interviews each, processing 1,200 total transcripts with evidence-based AI evaluation.
+                </p>
+                
+                <h4 style="font-size: 16px; font-weight: 600; margin: 24px 0 12px 0;">Current Capabilities</h4>
+                <ul style="color: #94a3b8; line-height: 1.8; margin-left: 20px;">
+                    <li>Evaluates "Asks clear, open-ended questions" indicator (Levels 1-4)</li>
+                    <li>Automated question extraction and classification from transcripts</li>
+                    <li>Evidence-based justifications with AI confidence scoring</li>
+                    <li>Student-specific analytics with performance tracking</li>
+                    <li>Instructor validation workflow with override functionality</li>
+                </ul>
+
+                <h4 style="font-size: 16px; font-weight: 600; margin: 24px 0 12px 0;">Development Roadmap</h4>
+                <ul style="color: #94a3b8; line-height: 1.8; margin-left: 20px;">
+                    <li><strong>Phase 1 (Complete - February 2026):</strong> Indicator 1 operational with test validation</li>
+                    <li><strong>Phase 2 (March 2026):</strong> Communication domain (10 indicators)</li>
+                    <li><strong>Phase 3 (April 2026):</strong> Critical Thinking domain (12 indicators)</li>
+                    <li><strong>Phase 4 (May 2026):</strong> Professional Agency domain (12 indicators)</li>
+                </ul>
+
+                <h4 style="font-size: 16px; font-weight: 600; margin: 24px 0 12px 0;">Technical Architecture</h4>
+                <ul style="color: #94a3b8; line-height: 1.8; margin-left: 20px;">
+                    <li>Backend: Python FastAPI with Groq AI (Llama 3.3 70B)</li>
+                    <li>AI Evaluation: Deductive rubric-based assessment methodology</li>
+                    <li>Processing: Real-time transcript analysis with evidence extraction</li>
+                    <li>Scalability: Designed to handle 1,200+ student transcripts</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://127.0.0.1:8000';
+        let selectedFile = null;
+        let studentData = {};
+
+        // File upload
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const uploadBtn = document.getElementById('uploadBtn');
+
+        dropZone.addEventListener('click', () => fileInput.click());
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#667eea';
+        });
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.style.borderColor = '#334155';
+        });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#334155';
+            if (e.dataTransfer.files.length > 0) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        });
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        function handleFile(file) {
+            selectedFile = file;
+            dropZone.innerHTML = `
+                <div style="font-size: 48px; margin-bottom: 16px; color: #10b981;">✓</div>
+                <div style="font-size: 18px; margin-bottom: 8px; color: #10b981;">${file.name}</div>
+                <div style="color: #94a3b8; font-size: 14px;">${(file.size / 1024).toFixed(1)} KB - Ready to process</div>
+            `;
+            uploadBtn.disabled = false;
+        }
+
+        async function processUpload() {
+            if (!selectedFile) return;
+            
+            uploadBtn.disabled = true;
+            document.getElementById('progressSection').style.display = 'block';
+            document.getElementById('statusMsg').innerHTML = '';
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress > 90) progress = 90;
+                updateProgress(progress);
+            }, 200);
+            
+            try {
+                const formData = new FormData();
+                formData.append('file', selectedFile);
+                
+                const response = await fetch(`${API_URL}/api/evaluate`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                clearInterval(interval);
+                updateProgress(100);
+                
+                if (data.status === 'success') {
+                    setTimeout(() => {
+                        processResults(data.results);
+                        showView('students');
+                    }, 500);
+                } else {
+                    showStatus('error', data.message);
+                }
+            } catch (error) {
+                clearInterval(interval);
+                showStatus('error', 'Backend connection failed. Make sure server is running on port 8000.');
+            }
+            
+            uploadBtn.disabled = false;
+        }
+
+        function updateProgress(percent) {
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').textContent = Math.round(percent) + '%';
+        }
+
+        function showStatus(type, message) {
+            const statusMsg = document.getElementById('statusMsg');
+            const colors = {
+                success: 'background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; color: #10b981;',
+                error: 'background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #ef4444;'
+            };
+            statusMsg.innerHTML = `<div style="padding: 12px; border-radius: 6px; ${colors[type]}">${message}</div>`;
+        }
+
+        function processResults(results) {
+            studentData = {};
+            
+            results.forEach(result => {
+                const sid = result.student_id;
+                if (!studentData[sid]) {
+                    studentData[sid] = {
+                        id: sid,
+                        name: `Student ${sid}`,
+                        evaluations: []
+                    };
+                }
+                studentData[sid].evaluations.push(result);
+            });
+            
+            displayStudents();
+        }
+
+        function loadDemoData() {
+            // Load embedded demo data
+            const demoResults = [
+                {
+                    student_id: "1",
+                    simulation: "A",
+                    indicator: "Asks clear, open-ended questions",
+                    level: 3,
+                    confidence: 0.92,
+                    open_ended_count: 24,
+                    closed_count: 5,
+                    total_questions: 29,
+                    strategic_phrasing_count: 2,
+                    open_ended_examples: [
+                        "Can you walk me through your typical morning routine?",
+                        "What specifically has been frustrating about the new system?",
+                        "How did you approach solving that problem?"
+                    ],
+                    closed_examples: ["Do you like the new feature?", "Is that correct?"],
+                    justification: "Student asked 24 open-ended questions in 15-minute interview (16 per 10 minutes), exceeding Level 3 threshold. Questions were clearly phrased with minimal clarification needed.",
+                    strengths: "Excellent question volume and clarity. Good use of follow-up questions.",
+                    improvements: "Could incorporate more strategic phrasing and invite storytelling more frequently."
+                },
+                {
+                    student_id: "1",
+                    simulation: "B",
+                    indicator: "Asks clear, open-ended questions",
+                    level: 2,
+                    confidence: 0.88,
+                    open_ended_count: 2,
+                    closed_count: 0,
+                    total_questions: 2,
+                    strategic_phrasing_count: 0,
+                    open_ended_examples: ["What are your main concerns?", "How can we improve this?"],
+                    closed_examples: [],
+                    justification: "Student asked only 2 open-ended questions in presentation-focused task. Appropriate for the context.",
+                    strengths: "Questions were relevant and well-timed.",
+                    improvements: "Could incorporate more interactive Q&A moments in presentations."
+                },
+                {
+                    student_id: "2",
+                    simulation: "A",
+                    indicator: "Asks clear, open-ended questions",
+                    level: 2,
+                    confidence: 0.85,
+                    open_ended_count: 3,
+                    closed_count: 1,
+                    total_questions: 4,
+                    strategic_phrasing_count: 0,
+                    open_ended_examples: ["What do you think about this?", "How does that work?", "Can you explain more?"],
+                    closed_examples: ["Is that right?"],
+                    justification: "Student asked 3 open-ended questions, meeting Level 2 threshold. Questions sometimes clear but lacked strategic phrasing.",
+                    strengths: "Basic questioning competence demonstrated.",
+                    improvements: "Increase question volume and use more strategic phrasing."
+                },
+                {
+                    student_id: "2",
+                    simulation: "B",
+                    indicator: "Asks clear, open-ended questions",
+                    level: 1,
+                    confidence: 0.95,
+                    open_ended_count: 0,
+                    closed_count: 0,
+                    total_questions: 0,
+                    strategic_phrasing_count: 0,
+                    open_ended_examples: [],
+                    closed_examples: [],
+                    justification: "Student asked 0 questions during interview. Student was not prepared or did not engage with the task.",
+                    strengths: "None identified in this performance.",
+                    improvements: "Student needs to prepare for interviews and actively engage with questioning."
+                }
+            ];
+            
+            processResults(demoResults);
+            showView('students');
+        }
+
+        function displayStudents() {
+            const students = Object.values(studentData);
+            
+            // Update stats
+            document.getElementById('statStudents').textContent = students.length;
+            document.getElementById('statEvals').textContent = students.reduce((sum, s) => sum + s.evaluations.length, 0);
+            const allLevels = students.flatMap(s => s.evaluations.map(e => e.level));
+            const avg = allLevels.reduce((sum, l) => sum + l, 0) / allLevels.length;
+            document.getElementById('statAvg').textContent = avg.toFixed(1);
+            document.getElementById('statReview').textContent = students.filter(s => s.evaluations.some(e => e.level === 1)).length;
+            
+            // Display student cards
+            const container = document.getElementById('studentsList');
+            container.innerHTML = students.map(student => {
+                const avgLevel = student.evaluations.reduce((sum, e) => sum + e.level, 0) / student.evaluations.length;
+                const needsReview = student.evaluations.some(e => e.level === 1);
+                
+                return `
+                    <div class="student-card">
+                        <div class="student-header">
+                            <div class="student-name">${student.name}</div>
+                            <div>
+                                <span class="badge badge-level-${getLevelClass(avgLevel)}">
+                                    Overall ${avgLevel.toFixed(1)}
+                                </span>
+                                ${needsReview ? '<span class="badge badge-review">Review</span>' : ''}
+                            </div>
+                        </div>
+                        
+                        <div class="student-stats">
+                            <div>Interviews: <span class="detail-value">${student.evaluations.length} of 4</span></div>
+                            <div>Communication: <span class="detail-value">${avgLevel.toFixed(1)} / 4.0</span></div>
+                            <div>Status: <span class="detail-value">Complete</span></div>
+                        </div>
+                        
+                        <div style="margin-top: 16px;">
+                            <button class="btn" onclick="event.stopPropagation(); viewStudentProfile('${student.id}')">
+                                View Profile →
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function viewStudentProfile(studentId) {
+            const student = studentData[studentId];
+            if (!student) return;
+            
+            const avgLevel = student.evaluations.reduce((sum, e) => sum + e.level, 0) / student.evaluations.length;
+            const needsReview = student.evaluations.some(e => e.level === 1);
+            
+            // Update profile header
+            document.getElementById('profileName').textContent = student.name;
+            document.getElementById('profileMeta').textContent = `Spring 2026 • Student ID: ${student.id}`;
+            document.getElementById('profileInterviews').textContent = student.evaluations.length;
+            document.getElementById('profileOverall').textContent = avgLevel.toFixed(1);
+            document.getElementById('profileComm').textContent = avgLevel.toFixed(1);
+            document.getElementById('profileStatus').textContent = 'Complete';
+            document.getElementById('profileReview').textContent = needsReview ? 'Needs Review' : 'Validated';
+            document.getElementById('profileReview').style.color = needsReview ? '#ef4444' : '#10b981';
+            
+            // Display evaluations
+            const container = document.getElementById('profileEvaluations');
+            container.innerHTML = student.evaluations.map((eval, idx) => `
+                <div style="margin-bottom: 32px; padding-bottom: 32px; ${idx < student.evaluations.length - 1 ? 'border-bottom: 1px solid #334155;' : ''}">
+                    <div class="eval-header">
+                        <div style="font-size: 16px; font-weight: 600;">
+                            Interview ${eval.simulation === 'A' ? '1' : '2'} - Simulation ${eval.simulation}
+                        </div>
+                        <span class="badge badge-level-${eval.level}">Level ${eval.level} / 4</span>
+                    </div>
+                    
+                    <div class="metric-grid">
+                        <div class="metric-box">
+                            <div class="metric-value">${eval.open_ended_count || 0}</div>
+                            <div class="metric-label">Open-Ended</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-value">${eval.closed_count || 0}</div>
+                            <div class="metric-label">Closed</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-value">${eval.total_questions || 0}</div>
+                            <div class="metric-label">Total</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-value">${eval.strategic_phrasing_count || 0}</div>
+                            <div class="metric-label">Strategic</div>
+                        </div>
+                    </div>
+                    
+                    <div class="evidence-section">
+                        <div class="section-title">AI Justification</div>
+                        <div class="section-content">${eval.justification}</div>
+                    </div>
+                    
+                    ${eval.open_ended_examples && eval.open_ended_examples.length > 0 ? `
+                        <div class="evidence-section">
+                            <div class="section-title">Open-Ended Questions</div>
+                            <ul class="example-list">
+                                ${eval.open_ended_examples.slice(0, 3).map(ex => `<li>${ex}</li>`).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px;">
+                        <div class="evidence-section">
+                            <div class="section-title">Strengths</div>
+                            <div class="section-content">${eval.strengths}</div>
+                        </div>
+                        <div class="evidence-section">
+                            <div class="section-title">Improvements</div>
+                            <div class="section-content">${eval.improvements}</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 12px; font-size: 12px; color: #94a3b8;">
+                        ${eval.confidence ? `AI Confidence: ${(eval.confidence * 100).toFixed(0)}%` : ''}
+                    </div>
+                </div>
+            `).join('');
+            
+            showView('profile');
+        }
+
+        function toggleDetails(studentId) {
+            const details = document.getElementById(`details-${studentId}`);
+            details.classList.toggle('show');
+        }
+
+        function getLevelClass(score) {
+            if (score >= 3.5) return 4;
+            if (score >= 2.5) return 3;
+            if (score >= 1.5) return 2;
+            return 1;
+        }
+
+        function showView(view) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            
+            const views = ['upload', 'students', 'framework', 'about', 'profile'];
+            const index = views.indexOf(view);
+            
+            document.getElementById(view + 'View').classList.add('active');
+            
+            // Only highlight nav for main tabs (not profile)
+            if (index >= 0 && index < 4) {
+                document.querySelectorAll('.nav-link')[index].classList.add('active');
+            }
+        }
+
+        function showDomain(domain) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            const domains = { 'comm': 0, 'crit': 1, 'prof': 2 };
+            const domainIds = { 'comm': 'commDomain', 'crit': 'critDomain', 'prof': 'profDomain' };
+            
+            document.querySelectorAll('.tab')[domains[domain]].classList.add('active');
+            document.getElementById(domainIds[domain]).classList.add('active');
+        }
+    </script>
+</body>
+</html>
