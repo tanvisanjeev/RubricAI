@@ -1,0 +1,175 @@
+<!-- Rubric Framework Page -->
+
+<div class="page-header">
+    <div class="page-title">Rubric Framework</div>
+    <div class="page-subtitle">34 research-backed behavioral indicators across 3 domains and 9 clusters</div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-label">Total Indicators</div>
+        <div class="stat-value">34</div>
+        <div class="stat-meta">3 domains · 9 clusters</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Active Now</div>
+        <div class="stat-value" style="color:#10b981;">1</div>
+        <div class="stat-meta">Indicator 1 — Phase 1</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">In Development</div>
+        <div class="stat-value">33</div>
+        <div class="stat-meta">Phases 2–4</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Levels Per Indicator</div>
+        <div class="stat-value">4</div>
+        <div class="stat-meta">Rubric-defined thresholds</div>
+    </div>
+</div>
+
+<!-- Active Indicator Detail -->
+<div class="card" style="border-color:#667eea;">
+    <div class="flex-between mb-4">
+        <div>
+            <div style="font-size:11px;font-weight:700;color:#667eea;text-transform:uppercase;margin-bottom:4px;">Active — Phase 1</div>
+            <div class="card-title" style="margin-bottom:4px;">Indicator 1: Asks clear, open-ended questions</div>
+            <div style="font-size:13px;color:#64748b;">Communication Domain · Interview Communication Cluster</div>
+        </div>
+        <span class="badge badge-active">Live</span>
+    </div>
+
+    <div style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;margin-bottom:12px;">Level Thresholds — How AI Scores</div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">
+        <div style="display:grid;grid-template-columns:80px 1fr;gap:16px;align-items:start;padding:14px;background:#0f172a;border-radius:8px;border-left:3px solid #ef4444;">
+            <div style="text-align:center;">
+                <span class="badge badge-1">Level 1</span>
+                <div style="font-size:20px;font-weight:800;color:#ef4444;margin-top:6px;">0–1</div>
+                <div style="font-size:10px;color:#64748b;">questions</div>
+            </div>
+            <div style="font-size:13px;color:#cbd5e1;line-height:1.7;">
+                Asks 0–1 open-ended questions per 10-minute segment. Questions are vague or confusing (interviewee asks for clarification 3 or more times). Phrasing may be unclear or leading. Questions conflate multiple topics. Does not invite storytelling.
+            </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:80px 1fr;gap:16px;align-items:start;padding:14px;background:#0f172a;border-radius:8px;border-left:3px solid #f59e0b;">
+            <div style="text-align:center;">
+                <span class="badge badge-2">Level 2</span>
+                <div style="font-size:20px;font-weight:800;color:#f59e0b;margin-top:6px;">2–3</div>
+                <div style="font-size:10px;color:#64748b;">questions</div>
+            </div>
+            <div style="font-size:13px;color:#cbd5e1;line-height:1.7;">
+                Asks 2–3 open-ended questions per 10-minute segment. Sometimes vague or confusing (clarification 2–3 times). Clear phrasing, no leading phrases. Questions sometimes conflate topics. Not strategically phrased. Does not invite storytelling.
+            </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:80px 1fr;gap:16px;align-items:start;padding:14px;background:#0f172a;border-radius:8px;border-left:3px solid #3b82f6;">
+            <div style="text-align:center;">
+                <span class="badge badge-3">Level 3</span>
+                <div style="font-size:20px;font-weight:800;color:#3b82f6;margin-top:6px;">4–5</div>
+                <div style="font-size:10px;color:#64748b;">questions</div>
+            </div>
+            <div style="font-size:13px;color:#cbd5e1;line-height:1.7;">
+                Asks 4–5 open-ended questions per 10-minute segment (e.g., "Can you tell me about...?", "What was your experience with...?"). Clearly phrased, minimal clarification (1–2 requests). Questions focus on one topic at a time. Not yet strategically phrased for storytelling.
+            </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:80px 1fr;gap:16px;align-items:start;padding:14px;background:#0f172a;border-radius:8px;border-left:3px solid #10b981;">
+            <div style="text-align:center;">
+                <span class="badge badge-4">Level 4</span>
+                <div style="font-size:20px;font-weight:800;color:#10b981;margin-top:6px;">6+</div>
+                <div style="font-size:10px;color:#64748b;">questions</div>
+            </div>
+            <div style="font-size:13px;color:#cbd5e1;line-height:1.7;">
+                Asks 6+ open-ended questions per 10-minute segment. Clearly phrased (less than 1 clarification request). Strategic phrasing 3–5 times: "Walk me through...", "Help me understand...", "What stood out to you about...?". Invites storytelling 2–4 times.
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-info">
+        <span>How Claude evaluates this indicator:</span>
+        <span>Claude reads the full transcript, identifies all student questions itself — no pre-extraction. Classifies each as open-ended or closed, counts against rubric thresholds, and assigns a level with evidence quotes from the transcript.</span>
+    </div>
+</div>
+
+<!-- Domain Tabs -->
+<div class="card">
+    <div class="card-title">All 34 Indicators</div>
+    <div class="tabs">
+        <div class="tab active" onclick="showRubricTab('comm', this)">Communication (10)</div>
+        <div class="tab" onclick="showRubricTab('crit', this)">Critical Thinking (12)</div>
+        <div class="tab" onclick="showRubricTab('prof', this)">Professional Agency (12)</div>
+    </div>
+
+    <div id="rComm" class="tab-content active">
+        <div class="cluster-section-title">Cluster 1 — Interview Communication (6 indicators)</div>
+        <div class="indicator-item active-indicator">
+            <div><div class="indicator-num">Indicator 1</div><div class="indicator-name">Asks clear, open-ended questions</div></div>
+            <span class="badge badge-active">Active</span>
+        </div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 2</div><div class="indicator-name">Uses follow-up questions to probe deeper</div></div><span class="badge badge-phase2">Phase 2</span></div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 3</div><div class="indicator-name">Demonstrates active listening</div></div><span class="badge badge-phase2">Phase 2</span></div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 4</div><div class="indicator-name">Adjusts communication style</div></div><span class="badge badge-phase2">Phase 2</span></div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 5</div><div class="indicator-name">Introduces self and purpose professionally</div></div><span class="badge badge-phase2">Phase 2</span></div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 6</div><div class="indicator-name">Builds rapport with stakeholders</div></div><span class="badge badge-phase2">Phase 2</span></div>
+
+        <div class="cluster-section-title">Cluster 2 — Communicating Ideas Clearly (4 indicators)</div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 7</div><div class="indicator-name">Organizes ideas logically with clear transitions</div></div><span class="badge badge-phase2">Phase 2</span></div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 8</div><div class="indicator-name">Connects claims to evidence</div></div><span class="badge badge-phase2">Phase 2</span></div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 9</div><div class="indicator-name">Uses clear, concise, professional tone</div></div><span class="badge badge-phase2">Phase 2</span></div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 10</div><div class="indicator-name">Adapts message for different audiences</div></div><span class="badge badge-phase2">Phase 2</span></div>
+    </div>
+
+    <div id="rCrit" class="tab-content">
+        <div class="cluster-section-title">Cluster 1 — Information Analysis (4 indicators)</div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 11</div><div class="indicator-name">Asks clear and targeted questions to explore issues</div></div><span class="badge badge-phase3">Phase 3</span></div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 12</div><div class="indicator-name">Identifies assumptions, gaps, or contradictions</div></div><span class="badge badge-phase3">Phase 3</span></div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 13</div><div class="indicator-name">Evaluates relevance of information</div></div><span class="badge badge-phase3">Phase 3</span></div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 14</div><div class="indicator-name">Breaks down complex problems into manageable parts</div></div><span class="badge badge-phase3">Phase 3</span></div>
+
+        <div class="cluster-section-title">Cluster 2 — Insight Synthesis (4 indicators)</div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 15</div><div class="indicator-name">Identifies relationships across data points</div></div><span class="badge badge-phase3">Phase 3</span></div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 16</div><div class="indicator-name">Recognizes patterns, themes, and root causes</div></div><span class="badge badge-phase3">Phase 3</span></div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 17</div><div class="indicator-name">Synthesizes evidence into insights and implications</div></div><span class="badge badge-phase3">Phase 3</span></div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 18</div><div class="indicator-name">Organizes insights with clear logical structure</div></div><span class="badge badge-phase3">Phase 3</span></div>
+
+        <div class="cluster-section-title">Cluster 3 — Decision Framing (4 indicators)</div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 19</div><div class="indicator-name">Clearly frames the decision or direction</div></div><span class="badge badge-phase3">Phase 3</span></div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 20</div><div class="indicator-name">Connects recommendations directly to evidence</div></div><span class="badge badge-phase3">Phase 3</span></div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 21</div><div class="indicator-name">Addresses uncertainty, limitations, trade-offs</div></div><span class="badge badge-phase3">Phase 3</span></div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 22</div><div class="indicator-name">Provides logical, feasible, client-aligned recommendation</div></div><span class="badge badge-phase3">Phase 3</span></div>
+    </div>
+
+    <div id="rProf" class="tab-content">
+        <div class="cluster-section-title">Cluster 1 — Professional Self-Efficacy (4 indicators)</div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 23</div><div class="indicator-name">Communicates with clarity and presence</div></div><span class="badge badge-phase4">Phase 4</span></div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 24</div><div class="indicator-name">Asks questions and seeks clarification confidently</div></div><span class="badge badge-phase4">Phase 4</span></div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 25</div><div class="indicator-name">Demonstrates comfort in formal environments</div></div><span class="badge badge-phase4">Phase 4</span></div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 26</div><div class="indicator-name">Expresses calibrated confidence</div></div><span class="badge badge-phase4">Phase 4</span></div>
+
+        <div class="cluster-section-title">Cluster 2 — Initiative and Action-Taking (4 indicators)</div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 27</div><div class="indicator-name">Begins tasks without excessive reassurance</div></div><span class="badge badge-phase4">Phase 4</span></div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 28</div><div class="indicator-name">Takes purposeful action under ambiguity</div></div><span class="badge badge-phase4">Phase 4</span></div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 29</div><div class="indicator-name">Identifies needed resources and concrete steps</div></div><span class="badge badge-phase4">Phase 4</span></div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 30</div><div class="indicator-name">Demonstrates persistence and ownership</div></div><span class="badge badge-phase4">Phase 4</span></div>
+
+        <div class="cluster-section-title">Cluster 3 — Growth-Oriented Mindset (4 indicators)</div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 31</div><div class="indicator-name">Interprets feedback as information for improvement</div></div><span class="badge badge-phase4">Phase 4</span></div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 32</div><div class="indicator-name">Reflects on learning with concrete examples</div></div><span class="badge badge-phase4">Phase 4</span></div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 33</div><div class="indicator-name">Responds to setbacks by adjusting strategies</div></div><span class="badge badge-phase4">Phase 4</span></div>
+        <div class="indicator-item"><div><div class="indicator-num">Indicator 34</div><div class="indicator-name">Demonstrates openness to experimentation</div></div><span class="badge badge-phase4">Phase 4</span></div>
+    </div>
+</div>
+
+<script>
+function initRubric() {}
+
+function showRubricTab(tab, el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    const map = { comm: 'rComm', crit: 'rCrit', prof: 'rProf' };
+    document.getElementById(map[tab]).classList.add('active');
+}
+</script>

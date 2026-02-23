@@ -1,0 +1,128 @@
+<!-- Students Page -->
+
+<div class="page-header">
+    <div class="page-title">Student Evaluations</div>
+    <div class="page-subtitle">Individual to Cluster to Domain to Overall scoring hierarchy</div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-label">Total Students</div>
+        <div class="stat-value" id="sTotal">0</div>
+        <div class="stat-meta">Evaluated</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Evaluations</div>
+        <div class="stat-value" id="sEvals">0</div>
+        <div class="stat-meta">Completed</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Average Score</div>
+        <div class="stat-value" id="sAvg">--</div>
+        <div class="stat-meta">Overall level / 4.0</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Needs Review</div>
+        <div class="stat-value" id="sReview" style="color:#ef4444;">0</div>
+        <div class="stat-meta">Flagged</div>
+    </div>
+</div>
+
+<div class="btn-group">
+    <button class="btn btn-secondary" onclick="loadPage('upload')">Upload New File</button>
+    <button class="btn btn-success" onclick="exportAllCSV()">Export All CSV</button>
+    <button class="btn btn-success" onclick="exportPDF()">Export PDF Report</button>
+</div>
+
+<div id="noDataState" style="display:none;">
+    <div class="card" style="text-align:center;padding:60px;">
+        <div style="font-size:18px;font-weight:600;margin-bottom:8px;">No students evaluated yet</div>
+        <div style="color:#64748b;font-size:14px;margin-bottom:24px;">Upload a CSV file or load demo data to get started</div>
+        <div class="btn-group" style="justify-content:center;">
+            <button class="btn" onclick="loadPage('upload')">Upload Transcripts</button>
+            <button class="btn btn-secondary" onclick="loadDemoData()">Load Demo Data</button>
+        </div>
+    </div>
+</div>
+
+<div id="studentsList"></div>
+
+<script>
+function initStudents() {
+    const students = Object.values(studentData);
+
+    const noData = document.getElementById('noDataState');
+    const list = document.getElementById('studentsList');
+
+    if (!students.length) {
+        if (noData) noData.style.display = 'block';
+        return;
+    }
+
+    if (noData) noData.style.display = 'none';
+
+    const allLevels = students.flatMap(s => s.evaluations.map(e => e.level));
+    const avg = allLevels.length
+        ? (allLevels.reduce((a,b) => a+b, 0) / allLevels.length).toFixed(1)
+        : '--';
+    const flagged = students.filter(s =>
+        s.evaluations.some(e => e.level === 1 || (e.confidence && e.confidence < 0.6))
+    );
+
+    document.getElementById('sTotal').textContent  = students.length;
+    document.getElementById('sEvals').textContent  = allLevels.length;
+    document.getElementById('sAvg').textContent    = avg;
+    document.getElementById('sReview').textContent = flagged.length;
+
+    list.innerHTML = students.map(s => {
+        const overall = s.scores.overall;
+        const domains = s.scores.domains || {};
+        const needsReview = s.evaluations.some(e =>
+            e.level === 1 || (e.confidence && e.confidence < 0.6)
+        );
+        const lvl = getLvlClass(overall || 0);
+
+        return `
+        <div class="student-card" onclick="loadPage('profile', '${s.id}')">
+            <div class="student-card-header">
+                <div>
+                    <div class="student-name">${s.name}</div>
+                    <div style="font-size:12px;color:#64748b;margin-top:2px;">
+                        ${s.evaluations.length} evaluation(s) completed
+                    </div>
+                </div>
+                <div style="display:flex;gap:8px;align-items:center;">
+                    <span class="badge badge-${lvl}">Overall ${overall || 'N/A'} / 4.0</span>
+                    ${needsReview ? '<span class="badge badge-review">Review Needed</span>' : ''}
+                </div>
+            </div>
+
+            <div class="domain-grid">
+                <div class="domain-box">
+                    <div class="domain-name">Communication</div>
+                    <div class="domain-score">${domains['Communication']?.score || '--'}</div>
+                </div>
+                <div class="domain-box">
+                    <div class="domain-name">Critical Thinking</div>
+                    <div class="domain-score">${domains['Critical Thinking']?.score || '--'}</div>
+                </div>
+                <div class="domain-box">
+                    <div class="domain-name">Prof. Agency</div>
+                    <div class="domain-score">${domains['Professional Agency']?.score || '--'}</div>
+                </div>
+            </div>
+
+            <div style="display:flex;gap:8px;margin-top:14px;">
+                <button class="btn btn-sm"
+                    onclick="event.stopPropagation();loadPage('profile','${s.id}')">
+                    View Profile
+                </button>
+                <button class="btn btn-secondary btn-sm"
+                    onclick="event.stopPropagation();exportStudentCSV('${s.id}')">
+                    Export CSV
+                </button>
+            </div>
+        </div>`;
+    }).join('');
+}
+</script>

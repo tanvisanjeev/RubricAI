@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RubricAI — Student Interview Assessment</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0a0f1e;color:#f1f5f9;line-height:1.6;display:flex;height:100vh;overflow:hidden;}
+
+/* SIDEBAR */
+.sidebar{width:240px;min-width:240px;background:#111827;border-right:1px solid #1f2937;display:flex;flex-direction:column;height:100vh;position:fixed;left:0;top:0;}
+.sidebar-logo{padding:20px 16px;border-bottom:1px solid #1f2937;}
+.logo-text{font-size:22px;font-weight:800;background:linear-gradient(135deg,#6366f1,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.logo-sub{font-size:11px;color:#4b5563;margin-top:2px;font-weight:500;}
+.sidebar-nav{flex:1;padding:12px 8px;overflow-y:auto;}
+.nav-section{font-size:10px;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:1px;padding:10px 8px 4px;margin-top:6px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;cursor:pointer;color:#9ca3af;font-size:13px;font-weight:500;transition:all 0.15s;margin-bottom:2px;text-decoration:none;}
+.nav-item:hover{background:rgba(99,102,241,0.12);color:#f1f5f9;}
+.nav-item.active{background:rgba(99,102,241,0.18);color:#818cf8;font-weight:600;}
+.nav-badge{margin-left:auto;background:rgba(99,102,241,0.25);color:#818cf8;font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:#4b5563;flex-shrink:0;}
+.nav-item.active .nav-dot{background:#818cf8;}
+.sidebar-footer{padding:14px 16px;border-top:1px solid #1f2937;}
+.sidebar-footer-text{font-size:11px;color:#374151;line-height:1.6;}
+.status-dot{width:7px;height:7px;border-radius:50%;background:#10b981;display:inline-block;margin-right:5px;box-shadow:0 0 6px #10b981;}
+
+/* MAIN */
+.main{margin-left:240px;flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden;}
+.topbar{background:#111827;border-bottom:1px solid #1f2937;padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.topbar-title{font-size:15px;font-weight:700;color:#f9fafb;}
+.topbar-meta{font-size:11px;color:#4b5563;}
+.topbar-right{display:flex;gap:8px;align-items:center;}
+.content{flex:1;overflow-y:auto;padding:28px 32px;}
+
+/* VIEWS */
+.view{display:none;}
+.view.active{display:block;}
+.page-title{font-size:26px;font-weight:800;color:#f9fafb;margin-bottom:6px;}
+.page-sub{color:#6b7280;font-size:13px;margin-bottom:24px;}
+
+/* CARDS */
+.card{background:#111827;border:1px solid #1f2937;border-radius:12px;padding:20px;margin-bottom:16px;}
+.card-title{font-size:14px;font-weight:700;color:#f9fafb;margin-bottom:12px;}
+.card-sub{font-size:12px;color:#6b7280;margin-bottom:12px;}
+
+/* STATS GRID */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+.stats-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px;}
+.stat-card{background:#111827;border:1px solid #1f2937;border-radius:12px;padding:18px;transition:border-color 0.2s,transform 0.2s;}
+.stat-card:hover{border-color:#6366f1;transform:translateY(-2px);}
+.stat-label{font-size:10px;font-weight:700;color:#4b5563;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;}
+.stat-value{font-size:32px;font-weight:800;color:#818cf8;line-height:1;margin-bottom:4px;}
+.stat-meta{font-size:11px;color:#6b7280;}
+
+/* KPI CARDS */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.kpi-card{background:linear-gradient(135deg,#111827,#0f172a);border:1px solid #1f2937;border-radius:12px;padding:16px;position:relative;overflow:hidden;transition:all 0.2s;}
+.kpi-card:hover{border-color:#6366f1;transform:translateY(-2px);}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:12px 12px 0 0;}
+.kpi-card.purple::before{background:linear-gradient(90deg,#6366f1,#8b5cf6);}
+.kpi-card.green::before{background:linear-gradient(90deg,#10b981,#059669);}
+.kpi-card.amber::before{background:linear-gradient(90deg,#f59e0b,#d97706);}
+.kpi-card.red::before{background:linear-gradient(90deg,#ef4444,#dc2626);}
+.kpi-label{font-size:10px;font-weight:700;color:#4b5563;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;}
+.kpi-value{font-size:28px;font-weight:800;margin-bottom:4px;}
+.kpi-card.purple .kpi-value{color:#818cf8;}
+.kpi-card.green .kpi-value{color:#34d399;}
+.kpi-card.amber .kpi-value{color:#fbbf24;}
+.kpi-card.red .kpi-value{color:#f87171;}
+.kpi-meta{font-size:11px;color:#6b7280;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;background:#6366f1;color:white;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.15s;text-decoration:none;}
+.btn:hover{background:#4f46e5;transform:translateY(-1px);box-shadow:0 4px 12px rgba(99,102,241,0.3);}
+.btn:disabled{opacity:0.4;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-secondary{background:#1f2937;color:#9ca3af;}
+.btn-secondary:hover{background:#374151;box-shadow:none;}
+.btn-success{background:#059669;}
+.btn-success:hover{background:#047857;box-shadow:0 4px 12px rgba(16,185,129,0.3);}
+.btn-danger{background:#dc2626;}
+.btn-outline{background:transparent;border:1px solid #1f2937;color:#9ca3af;}
+.btn-outline:hover{border-color:#6366f1;color:#818cf8;background:rgba(99,102,241,0.06);}
+.btn-sm{padding:5px 12px;font-size:12px;}
+.btn-lg{padding:12px 24px;font-size:14px;}
+.btn-group{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;}
+.badge-1{background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.2);}
+.badge-2{background:rgba(245,158,11,0.15);color:#fcd34d;border:1px solid rgba(245,158,11,0.2);}
+.badge-3{background:rgba(59,130,246,0.15);color:#93c5fd;border:1px solid rgba(59,130,246,0.2);}
+.badge-4{background:rgba(16,185,129,0.15);color:#6ee7b7;border:1px solid rgba(16,185,129,0.2);}
+.badge-review{background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.2);}
+.badge-active{background:rgba(16,185,129,0.15);color:#6ee7b7;border:1px solid rgba(16,185,129,0.2);}
+.badge-override{background:rgba(99,102,241,0.15);color:#a5b4fc;border:1px solid rgba(99,102,241,0.2);}
+.badge-p2{background:rgba(99,102,241,0.1);color:#818cf8;}
+.badge-p3{background:rgba(139,92,246,0.1);color:#c084fc;}
+.badge-p4{background:rgba(20,184,166,0.1);color:#5eead4;}
+
+/* UPLOAD ZONE */
+.upload-zone{border:2px dashed #1f2937;border-radius:12px;padding:50px 40px;text-align:center;cursor:pointer;transition:all 0.2s;background:#0a0f1e;margin-bottom:16px;}
+.upload-zone:hover,.upload-zone.dragover{border-color:#6366f1;background:rgba(99,102,241,0.04);}
+
+/* PROGRESS */
+.progress-bar{height:6px;background:#0a0f1e;border-radius:3px;overflow:hidden;margin:10px 0;}
+.progress-fill{height:100%;background:linear-gradient(90deg,#6366f1,#8b5cf6);width:0%;transition:width 0.3s;border-radius:3px;}
+
+/* STUDENT CARDS */
+.student-card{background:#111827;border:1px solid #1f2937;border-radius:12px;padding:18px 20px;margin-bottom:10px;cursor:pointer;transition:all 0.2s;}
+.student-card:hover{border-color:#6366f1;background:rgba(99,102,241,0.03);transform:translateY(-1px);box-shadow:0 4px 20px rgba(0,0,0,0.3);}
+.student-card.flagged{border-left:3px solid #ef4444;}
+
+/* DOMAIN CIRCLES */
+.domain-circles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0;}
+.domain-circle-box{background:#0a0f1e;border:1px solid #1f2937;border-radius:10px;padding:14px;text-align:center;}
+.domain-circle-name{font-size:9px;font-weight:700;color:#4b5563;text-transform:uppercase;margin-bottom:8px;letter-spacing:0.5px;}
+.circle-wrap{position:relative;width:64px;height:64px;margin:0 auto 8px;}
+.circle-wrap svg{transform:rotate(-90deg);}
+.circle-bg{fill:none;stroke:#1f2937;stroke-width:6;}
+.circle-fill{fill:none;stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset 0.8s ease;}
+.circle-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:16px;font-weight:800;}
+
+/* SCORE HIERARCHY */
+.hierarchy{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:14px 0;padding:16px;background:#0a0f1e;border-radius:10px;border:1px solid #1f2937;}
+.h-step{background:#111827;border:1px solid #1f2937;border-radius:8px;padding:10px 16px;text-align:center;font-size:11px;font-weight:600;min-width:100px;transition:all 0.2s;}
+.h-step.active{border-color:#6366f1;background:rgba(99,102,241,0.1);color:#818cf8;}
+.h-step-label{font-size:9px;color:#4b5563;text-transform:uppercase;margin-bottom:3px;}
+.h-step-value{font-size:18px;font-weight:800;color:#818cf8;}
+.h-arrow{color:#374151;font-size:18px;font-weight:700;}
+
+/* LEVEL BAR */
+.level-bar{display:flex;gap:3px;margin:8px 0;}
+.ls{flex:1;height:6px;border-radius:3px;background:#1f2937;transition:background 0.3s;}
+.ls.f1{background:#ef4444;} .ls.f2{background:#f59e0b;} .ls.f3{background:#3b82f6;} .ls.f4{background:#10b981;}
+
+/* LEVEL DEFINITION BOX */
+.level-def{background:rgba(99,102,241,0.06);border:1px solid rgba(99,102,241,0.15);border-radius:8px;padding:12px 14px;margin:8px 0;font-size:12px;color:#d1d5db;line-height:1.7;}
+
+/* EVIDENCE */
+.ev-box{background:#0a0f1e;border-left:3px solid #6366f1;border-radius:0 8px 8px 0;padding:12px 14px;margin:8px 0;}
+.ev-box.flag{border-left-color:#ef4444;background:rgba(239,68,68,0.04);}
+.ev-box.ok{border-left-color:#10b981;background:rgba(16,185,129,0.04);}
+.ev-title{font-size:10px;font-weight:700;color:#4b5563;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;}
+.ev-text{font-size:13px;color:#d1d5db;line-height:1.7;}
+.quote-list{list-style:none;margin-top:6px;}
+.quote-list li{padding:6px 10px;background:#111827;border:1px solid #1f2937;border-radius:6px;margin-bottom:4px;font-size:12px;color:#9ca3af;font-style:italic;}
+
+/* METRIC GRID */
+.metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0;}
+.metric-box{background:#111827;border:1px solid #1f2937;border-radius:8px;padding:12px;text-align:center;}
+.metric-value{font-size:22px;font-weight:800;color:#818cf8;margin-bottom:3px;}
+.metric-value.flagged{color:#ef4444;}
+.metric-value.good{color:#34d399;}
+.metric-label{font-size:10px;font-weight:700;color:#4b5563;text-transform:uppercase;}
+
+/* CLUSTER ROW */
+.cluster-row{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#0a0f1e;border-radius:6px;margin-bottom:5px;}
+.cluster-label{font-size:12px;color:#9ca3af;}
+.cluster-val{font-size:12px;color:#f9fafb;font-weight:700;}
+
+/* OVERRIDE */
+.override-row{display:flex;align-items:center;gap:8px;padding:10px 14px;background:#0a0f1e;border:1px solid #1f2937;border-radius:8px;margin-top:12px;flex-wrap:wrap;}
+.override-label{font-size:11px;color:#4b5563;font-weight:700;text-transform:uppercase;}
+.override-select{background:#111827;border:1px solid #1f2937;color:#f1f5f9;padding:6px 10px;border-radius:6px;font-size:12px;cursor:pointer;}
+
+/* ALERT */
+.alert{padding:10px 14px;border-radius:8px;font-size:12px;margin-bottom:12px;display:flex;align-items:flex-start;gap:8px;line-height:1.6;}
+.alert-info{background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.2);color:#a5b4fc;}
+.alert-warning{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);color:#fca5a5;}
+.alert-success{background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);color:#6ee7b7;}
+.alert-amber{background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);color:#fcd34d;}
+
+/* FLOW */
+.flow-diagram{display:flex;align-items:center;gap:6px;padding:16px;background:#0a0f1e;border-radius:10px;flex-wrap:wrap;justify-content:center;margin:12px 0;border:1px solid #1f2937;}
+.flow-step{background:#111827;border:1px solid #1f2937;border-radius:8px;padding:8px 14px;text-align:center;font-size:11px;min-width:80px;}
+.flow-num{font-size:9px;font-weight:700;color:#6366f1;text-transform:uppercase;margin-bottom:3px;}
+.flow-text{color:#d1d5db;font-weight:600;}
+.flow-arrow{color:#374151;font-size:16px;}
+
+/* INDICATOR */
+.indicator-item{background:#111827;border:1px solid #1f2937;border-radius:8px;padding:12px 16px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;transition:all 0.15s;}
+.indicator-item:hover{border-color:#374151;}
+.indicator-item.active-ind{background:rgba(99,102,241,0.06);border-color:#6366f1;}
+.ind-num{font-size:10px;font-weight:700;color:#374151;text-transform:uppercase;margin-bottom:2px;}
+.ind-name{font-size:13px;font-weight:600;color:#f9fafb;}
+.cluster-section{font-size:10px;font-weight:700;color:#4b5563;text-transform:uppercase;letter-spacing:0.8px;margin:16px 0 8px;}
+
+/* TABS */
+.tabs{display:flex;border-bottom:1px solid #1f2937;margin-bottom:20px;}
+.tab{padding:8px 18px;font-size:12px;font-weight:600;color:#4b5563;cursor:pointer;border-bottom:2px solid transparent;transition:all 0.15s;}
+.tab:hover{color:#f1f5f9;}
+.tab.active{color:#818cf8;border-bottom-color:#6366f1;}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+
+/* PRINCIPLE */
+.principle-card{background:#111827;border:1px solid #1f2937;border-radius:10px;padding:16px;margin-bottom:10px;display:flex;gap:14px;align-items:flex-start;transition:border-color 0.2s;}
+.principle-card:hover{border-color:#6366f1;}
+.principle-icon{width:36px;height:36px;background:rgba(99,102,241,0.12);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#818cf8;flex-shrink:0;}
+.principle-title{font-size:13px;font-weight:700;color:#f9fafb;margin-bottom:4px;}
+.principle-text{font-size:12px;color:#6b7280;line-height:1.7;}
+
+/* GRID UTILS */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.flex-between{display:flex;justify-content:space-between;align-items:center;}
+.mt-3{margin-top:12px;}
+.mb-3{margin-bottom:12px;}
+.divider{border:none;border-top:1px solid #1f2937;margin:16px 0;}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:#0a0f1e;}
+::-webkit-scrollbar-thumb{background:#1f2937;border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:#374151;}
+
+/* REVIEW SECTION */
+.review-banner{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px;}
+.review-banner-text{font-size:13px;color:#fca5a5;font-weight:600;}
+.review-banner-sub{font-size:11px;color:#9ca3af;margin-top:2px;}
+
+/* PROFILE TABS */
+.profile-tabs{display:flex;gap:4px;margin-bottom:20px;background:#0a0f1e;padding:4px;border-radius:10px;border:1px solid #1f2937;}
+.profile-tab{flex:1;padding:8px 12px;text-align:center;font-size:12px;font-weight:600;color:#4b5563;cursor:pointer;border-radius:7px;transition:all 0.15s;}
+.profile-tab:hover{color:#f1f5f9;}
+.profile-tab.active{background:#6366f1;color:white;}
+.profile-tab-content{display:none;}
+.profile-tab-content.active{display:block;}
+
+/* SCORE TABLE */
+.score-table{width:100%;border-collapse:collapse;font-size:13px;}
+.score-table th{text-align:left;padding:8px 14px;font-size:10px;font-weight:700;color:#4b5563;text-transform:uppercase;border-bottom:1px solid #1f2937;}
+.score-table td{padding:10px 14px;border-bottom:1px solid #0a0f1e;color:#d1d5db;}
+.score-table tr:hover td{background:rgba(99,102,241,0.03);}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+    <div class="sidebar-logo">
+        <div class="logo-text">RubricAI</div>
+        <div class="logo-sub">AI-Powered Interview Assessment</div>
+    </div>
+    <nav class="sidebar-nav">
+        <div class="nav-section">Main</div>
+        <a class="nav-item active" onclick="showView('upload')"><span class="nav-dot"></span>Upload and Evaluate</a>
+        <a class="nav-item" onclick="showView('students')"><span class="nav-dot"></span>Students<span class="nav-badge" id="studentCount">0</span></a>
+        <div class="nav-section">Assessment</div>
+        <a class="nav-item" onclick="showView('rubric')"><span class="nav-dot"></span>Rubric Framework</a>
+        <a class="nav-item" onclick="showView('transparency')"><span class="nav-dot"></span>AI Transparency</a>
+        <div class="nav-section">Info</div>
+        <a class="nav-item" onclick="showView('about')"><span class="nav-dot"></span>About</a>
+    </nav>
+    <div class="sidebar-footer">
+        <div class="sidebar-footer-text">
+            <span class="status-dot"></span>Claude AI Active<br>
+            CPS LEARN Lab · Northeastern<br>
+            v1.0 · Phase 1
+        </div>
+    </div>
+</aside>
+
+<div class="main">
+    <div class="topbar">
+        <div>
+            <div class="topbar-title" id="topbarTitle">Upload and Evaluate</div>
+            <div class="topbar-meta" id="topbarMeta">Upload student interview transcripts for AI evaluation</div>
+        </div>
+        <div class="topbar-right">
+            <button class="btn btn-outline btn-sm" onclick="showView('upload')">New Evaluation</button>
+            <button class="btn btn-success btn-sm" id="exportAllBtn" onclick="exportAllCSV()" style="display:none;">Export All CSV</button>
+            <button class="btn btn-success btn-sm" id="exportPDFBtn" onclick="exportPDF()" style="display:none;">Export All PDF</button>
+        </div>
+    </div>
+
+    <div class="content">
+
+<!-- ══════════ UPLOAD VIEW ══════════ -->
+<div id="uploadView" class="view active">
+    <div class="page-title">Upload and Evaluate</div>
+    <div class="page-sub">Upload student interview transcripts for AI-powered rubric evaluation</div>
+
+    <div class="card">
+        <div class="card-title">Upload CSV File</div>
+        <div class="card-sub">Required columns: <strong style="color:#f9fafb;">Student</strong>, <strong style="color:#f9fafb;">Sim A Script</strong>, <strong style="color:#f9fafb;">Sim B Script</strong></div>
+        <div class="upload-zone" id="dropZone">
+            <div style="font-size:14px;font-weight:600;color:#4b5563;margin-bottom:6px;">Drop CSV file here or click to browse</div>
+            <div style="font-size:12px;color:#374151;">Supports CSV files from partner schools</div>
+            <input type="file" id="fileInput" accept=".csv" style="display:none">
+        </div>
+        <div style="text-align:center;">
+            <button class="btn btn-lg" id="uploadBtn" disabled onclick="processUpload()">Start AI Evaluation</button>
+            <button class="btn btn-secondary btn-lg" onclick="loadDemoData()" style="margin-left:10px;">Load Demo Data</button>
+        </div>
+        <div id="progressSection" style="display:none;margin-top:20px;">
+            <div style="display:flex;justify-content:space-between;font-size:12px;color:#4b5563;margin-bottom:4px;">
+                <span>Analyzing with Claude AI...</span><span id="progressText">0%</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        </div>
+        <div id="statusMsg" style="margin-top:12px;"></div>
+    </div>
+
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-title">How Claude AI Evaluates</div>
+            <div class="flow-diagram">
+                <div class="flow-step"><div class="flow-num">Input</div><div class="flow-text">Raw Transcript</div></div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step"><div class="flow-num">Reads</div><div class="flow-text">Rubric File</div></div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step"><div class="flow-num">Finds</div><div class="flow-text">Behaviors</div></div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step"><div class="flow-num">Assigns</div><div class="flow-text">Level 1–4</div></div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step"><div class="flow-num">Returns</div><div class="flow-text">Evidence</div></div>
+            </div>
+            <div class="alert alert-info mt-3">No hardcoded prompts. Claude reads Harry's rubric directly. The rubric defines the thresholds. Claude applies them.</div>
+        </div>
+        <div class="card">
+            <div class="card-title">Scoring Hierarchy</div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;">
+                <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#0a0f1e;border-radius:8px;border-left:3px solid #6366f1;">
+                    <div style="font-size:18px;font-weight:800;color:#818cf8;min-width:30px;">1</div>
+                    <div><div style="font-size:12px;font-weight:700;color:#f9fafb;">Individual Indicator</div><div style="font-size:11px;color:#4b5563;">Level 1–4 per indicator</div></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#0a0f1e;border-radius:8px;border-left:3px solid #8b5cf6;">
+                    <div style="font-size:18px;font-weight:800;color:#a78bfa;min-width:30px;">2</div>
+                    <div><div style="font-size:12px;font-weight:700;color:#f9fafb;">Cluster Score</div><div style="font-size:11px;color:#4b5563;">Average of related indicators</div></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#0a0f1e;border-radius:8px;border-left:3px solid #06b6d4;">
+                    <div style="font-size:18px;font-weight:800;color:#67e8f9;min-width:30px;">3</div>
+                    <div><div style="font-size:12px;font-weight:700;color:#f9fafb;">Domain Score</div><div style="font-size:11px;color:#4b5563;">Average of cluster scores</div></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#0a0f1e;border-radius:8px;border-left:3px solid #10b981;">
+                    <div style="font-size:18px;font-weight:800;color:#34d399;min-width:30px;">4</div>
+                    <div><div style="font-size:12px;font-weight:700;color:#f9fafb;">Overall Score</div><div style="font-size:11px;color:#4b5563;">Average of domain scores</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ STUDENTS VIEW ══════════ -->
+<div id="studentsView" class="view">
+    <div class="page-title">Student Evaluations</div>
+    <div class="page-sub">AI-generated evaluations with Individual to Cluster to Domain to Overall scoring</div>
+
+    <div class="kpi-grid">
+        <div class="kpi-card purple"><div class="kpi-label">Total Students</div><div class="kpi-value" id="sTotal">0</div><div class="kpi-meta">Evaluated</div></div>
+        <div class="kpi-card green"><div class="kpi-label">Evaluations</div><div class="kpi-value" id="sEvals">0</div><div class="kpi-meta">Completed</div></div>
+        <div class="kpi-card amber"><div class="kpi-label">Class Average</div><div class="kpi-value" id="sAvg">--</div><div class="kpi-meta">Overall level / 4.0</div></div>
+        <div class="kpi-card red"><div class="kpi-label">Needs Review</div><div class="kpi-value" id="sReview">0</div><div class="kpi-meta">Flagged</div></div>
+    </div>
+
+    <div id="reviewBanner" style="display:none;" class="review-banner">
+        <div style="width:8px;height:8px;border-radius:50%;background:#ef4444;flex-shrink:0;box-shadow:0 0 8px #ef4444;"></div>
+        <div>
+            <div class="review-banner-text" id="reviewBannerText">Students need instructor review</div>
+            <div class="review-banner-sub">Low confidence scores or Level 1 evaluations detected. Review flagged students below.</div>
+        </div>
+    </div>
+
+    <div class="btn-group">
+        <button class="btn btn-secondary" onclick="showView('upload')">Upload New File</button>
+        <button class="btn btn-success" onclick="exportAllCSV()">Export All CSV</button>
+        <button class="btn btn-success" onclick="exportPDF()">Export All PDF</button>
+    </div>
+
+    <div id="noData" style="display:none;">
+        <div class="card" style="text-align:center;padding:50px;">
+            <div style="font-size:16px;font-weight:600;margin-bottom:8px;color:#f9fafb;">No students evaluated yet</div>
+            <div style="color:#4b5563;font-size:13px;margin-bottom:20px;">Upload a CSV file or load demo data to get started</div>
+            <div class="btn-group" style="justify-content:center;">
+                <button class="btn" onclick="showView('upload')">Upload Transcripts</button>
+                <button class="btn btn-secondary" onclick="loadDemoData()">Load Demo Data</button>
+            </div>
+        </div>
+    </div>
+    <div id="studentsList"></div>
+</div>
+
+<!-- ══════════ PROFILE VIEW ══════════ -->
+<div id="profileView" class="view">
+    <div style="margin-bottom:16px;">
+        <span style="color:#4b5563;font-size:12px;cursor:pointer;" onclick="showView('students')">← Back to Students</span>
+    </div>
+
+    <div class="flex-between" style="margin-bottom:20px;">
+        <div>
+            <div class="page-title" id="pName">Student Profile</div>
+            <div style="font-size:12px;color:#4b5563;margin-top:4px;" id="pMeta"></div>
+        </div>
+        <div style="display:flex;gap:8px;">
+            <button class="btn btn-success btn-sm" id="exportStudentCSVBtn">Export CSV</button>
+            <button class="btn btn-success btn-sm" id="exportStudentPDFBtn">Export PDF</button>
+        </div>
+    </div>
+
+    <!-- Score Hierarchy Visual -->
+    <div class="card">
+        <div class="card-title">Score Breakdown — Individual to Overall</div>
+        <div class="hierarchy" id="profileHierarchy">
+            <div class="h-step active"><div class="h-step-label">Indicator Score</div><div class="h-step-value" id="hIndicator">--</div></div>
+            <div class="h-arrow">→</div>
+            <div class="h-step active"><div class="h-step-label">Cluster Score</div><div class="h-step-value" id="hCluster">--</div></div>
+            <div class="h-arrow">→</div>
+            <div class="h-step active"><div class="h-step-label">Domain Score</div><div class="h-step-value" id="hDomain">--</div></div>
+            <div class="h-arrow">→</div>
+            <div class="h-step active" style="border-color:#10b981;background:rgba(16,185,129,0.08);"><div class="h-step-label">Overall Score</div><div class="h-step-value" style="color:#34d399;" id="hOverall">--</div></div>
+        </div>
+    </div>
+
+    <!-- KPI Row -->
+    <div class="kpi-grid">
+        <div class="kpi-card purple"><div class="kpi-label">Overall Score</div><div class="kpi-value" id="pOverall">--</div><div class="kpi-meta">/ 4.0</div></div>
+        <div class="kpi-card green"><div class="kpi-label">Communication</div><div class="kpi-value" id="pComm">--</div><div class="kpi-meta">Domain avg</div></div>
+        <div class="kpi-card amber"><div class="kpi-label">Critical Thinking</div><div class="kpi-value" id="pCrit">--</div><div class="kpi-meta">Domain avg</div></div>
+        <div class="kpi-card red"><div class="kpi-label">Prof. Agency</div><div class="kpi-value" id="pProf">--</div><div class="kpi-meta">Domain avg</div></div>
+    </div>
+
+    <!-- Domain Circles -->
+    <div class="card">
+        <div class="card-title">Domain Scores</div>
+        <div class="domain-circles" id="domainCircles"></div>
+    </div>
+
+    <!-- Profile Tabs -->
+    <div class="profile-tabs">
+        <div class="profile-tab active" onclick="showProfileTab('evaluations',this)">Evaluations</div>
+        <div class="profile-tab" onclick="showProfileTab('clusters',this)">Cluster Scores</div>
+        <div class="profile-tab" onclick="showProfileTab('rubric',this)">Rubric Levels</div>
+    </div>
+
+    <div id="ptEvaluations" class="profile-tab-content active">
+        <div id="pEvals"></div>
+    </div>
+
+    <div id="ptClusters" class="profile-tab-content">
+        <div id="clusterScores"></div>
+    </div>
+
+    <div id="ptRubric" class="profile-tab-content">
+        <div class="card">
+            <div class="card-title">Indicator 1 Level Definitions</div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+                <div style="display:grid;grid-template-columns:70px 1fr;gap:12px;align-items:start;padding:12px;background:#0a0f1e;border-radius:8px;border-left:3px solid #ef4444;">
+                    <div style="text-align:center;"><span class="badge badge-1">Level 1</span><div style="font-size:20px;font-weight:800;color:#ef4444;margin-top:4px;">0–1</div></div>
+                    <div style="font-size:12px;color:#d1d5db;line-height:1.7;">Asks 0–1 open-ended questions per 10-minute segment. Questions are vague or confusing. Phrasing may be unclear or leading. Does not invite storytelling.</div>
+                </div>
+                <div style="display:grid;grid-template-columns:70px 1fr;gap:12px;align-items:start;padding:12px;background:#0a0f1e;border-radius:8px;border-left:3px solid #f59e0b;">
+                    <div style="text-align:center;"><span class="badge badge-2">Level 2</span><div style="font-size:20px;font-weight:800;color:#f59e0b;margin-top:4px;">2–3</div></div>
+                    <div style="font-size:12px;color:#d1d5db;line-height:1.7;">Asks 2–3 open-ended questions. Clear phrasing, no leading phrases. Sometimes vague. Not strategically phrased.</div>
+                </div>
+                <div style="display:grid;grid-template-columns:70px 1fr;gap:12px;align-items:start;padding:12px;background:#0a0f1e;border-radius:8px;border-left:3px solid #3b82f6;">
+                    <div style="text-align:center;"><span class="badge badge-3">Level 3</span><div style="font-size:20px;font-weight:800;color:#3b82f6;margin-top:4px;">4–5</div></div>
+                    <div style="font-size:12px;color:#d1d5db;line-height:1.7;">Asks 4–5 open-ended questions. Clearly phrased, minimal clarification. Questions focus on one topic at a time.</div>
+                </div>
+                <div style="display:grid;grid-template-columns:70px 1fr;gap:12px;align-items:start;padding:12px;background:#0a0f1e;border-radius:8px;border-left:3px solid #10b981;">
+                    <div style="text-align:center;"><span class="badge badge-4">Level 4</span><div style="font-size:20px;font-weight:800;color:#10b981;margin-top:4px;">6+</div></div>
+                    <div style="font-size:12px;color:#d1d5db;line-height:1.7;">Asks 6+ open-ended questions. Strategic phrasing 3–5 times: "Walk me through...", "Help me understand...". Invites storytelling 2–4 times.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ RUBRIC VIEW ══════════ -->
+<div id="rubricView" class="view">
+    <div class="page-title">Rubric Framework</div>
+    <div class="page-sub">34 research-backed behavioral indicators across 3 domains and 9 clusters</div>
+
+    <div class="kpi-grid">
+        <div class="kpi-card purple"><div class="kpi-label">Total Indicators</div><div class="kpi-value">34</div><div class="kpi-meta">3 domains · 9 clusters</div></div>
+        <div class="kpi-card green"><div class="kpi-label">Active Now</div><div class="kpi-value">1</div><div class="kpi-meta">Indicator 1 — Phase 1</div></div>
+        <div class="kpi-card amber"><div class="kpi-label">In Development</div><div class="kpi-value">33</div><div class="kpi-meta">Phases 2–4</div></div>
+        <div class="kpi-card red"><div class="kpi-label">Levels</div><div class="kpi-value">4</div><div class="kpi-meta">Per indicator</div></div>
+    </div>
+
+    <div class="card" style="border-color:#6366f1;">
+        <div class="flex-between mb-3">
+            <div>
+                <div style="font-size:10px;font-weight:700;color:#6366f1;text-transform:uppercase;margin-bottom:3px;">Active — Phase 1</div>
+                <div class="card-title" style="margin-bottom:3px;">Indicator 1: Asks clear, open-ended questions</div>
+                <div style="font-size:12px;color:#4b5563;">Communication Domain · Interview Communication Cluster</div>
+            </div>
+            <span class="badge badge-active">Live</span>
+        </div>
+
+        <div style="font-size:11px;font-weight:700;color:#4b5563;text-transform:uppercase;margin-bottom:10px;">Level Thresholds</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;">
+            <div style="padding:14px;background:#0a0f1e;border-radius:8px;border-top:3px solid #ef4444;text-align:center;">
+                <span class="badge badge-1" style="margin-bottom:8px;">Level 1</span>
+                <div style="font-size:26px;font-weight:800;color:#ef4444;">0–1</div>
+                <div style="font-size:10px;color:#4b5563;margin-top:2px;">questions</div>
+                <div style="font-size:11px;color:#6b7280;margin-top:8px;line-height:1.5;">Vague, confusing, not strategic</div>
+            </div>
+            <div style="padding:14px;background:#0a0f1e;border-radius:8px;border-top:3px solid #f59e0b;text-align:center;">
+                <span class="badge badge-2" style="margin-bottom:8px;">Level 2</span>
+                <div style="font-size:26px;font-weight:800;color:#f59e0b;">2–3</div>
+                <div style="font-size:10px;color:#4b5563;margin-top:2px;">questions</div>
+                <div style="font-size:11px;color:#6b7280;margin-top:8px;line-height:1.5;">Clear phrasing, not strategic</div>
+            </div>
+            <div style="padding:14px;background:#0a0f1e;border-radius:8px;border-top:3px solid #3b82f6;text-align:center;">
+                <span class="badge badge-3" style="margin-bottom:8px;">Level 3</span>
+                <div style="font-size:26px;font-weight:800;color:#3b82f6;">4–5</div>
+                <div style="font-size:10px;color:#4b5563;margin-top:2px;">questions</div>
+                <div style="font-size:11px;color:#6b7280;margin-top:8px;line-height:1.5;">Focused, clearly phrased</div>
+            </div>
+            <div style="padding:14px;background:#0a0f1e;border-radius:8px;border-top:3px solid #10b981;text-align:center;">
+                <span class="badge badge-4" style="margin-bottom:8px;">Level 4</span>
+                <div style="font-size:26px;font-weight:800;color:#10b981;">6+</div>
+                <div style="font-size:10px;color:#4b5563;margin-top:2px;">questions</div>
+                <div style="font-size:11px;color:#6b7280;margin-top:8px;line-height:1.5;">Strategic, invites storytelling</div>
+            </div>
+        </div>
+        <div class="alert alert-info">How Claude evaluates: Claude reads the full transcript, identifies all questions itself — no pre-extraction. Classifies each, counts against thresholds, assigns level with evidence quotes.</div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">All 34 Indicators</div>
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('comm',this)">Communication (10)</div>
+            <div class="tab" onclick="showTab('crit',this)">Critical Thinking (12)</div>
+            <div class="tab" onclick="showTab('prof',this)">Professional Agency (12)</div>
+        </div>
+        <div id="rComm" class="tab-content active">
+            <div class="cluster-section">Cluster 1 — Interview Communication (6)</div>
+            <div class="indicator-item active-ind"><div><div class="ind-num">Indicator 1</div><div class="ind-name">Asks clear, open-ended questions</div></div><span class="badge badge-active">Active</span></div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 2</div><div class="ind-name">Uses follow-up questions to probe deeper</div></div><span class="badge badge-p2">Phase 2</span></div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 3</div><div class="ind-name">Demonstrates active listening</div></div><span class="badge badge-p2">Phase 2</span></div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 4</div><div class="ind-name">Adjusts communication style</div></div><span class="badge badge-p2">Phase 2</span></div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 5</div><div class="ind-name">Introduces self and purpose professionally</div></div><span class="badge badge-p2">Phase 2</span></div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 6</div><div class="ind-name">Builds rapport with stakeholders</div></div><span class="badge badge-p2">Phase 2</span></div>
+            <div class="cluster-section">Cluster 2 — Communicating Ideas Clearly (4)</div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 7</div><div class="ind-name">Organizes ideas logically with clear transitions</div></div><span class="badge badge-p2">Phase 2</span></div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 8</div><div class="ind-name">Connects claims to evidence</div></div><span class="badge badge-p2">Phase 2</span></div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 9</div><div class="ind-name">Uses clear, concise, professional tone</div></div><span class="badge badge-p2">Phase 2</span></div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 10</div><div class="ind-name">Adapts message for different audiences</div></div><span class="badge badge-p2">Phase 2</span></div>
+        </div>
+        <div id="rCrit" class="tab-content">
+            <div class="cluster-section">Cluster 1 — Information Analysis (4)</div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 11</div><div class="ind-name">Asks clear and targeted questions to explore issues</div></div><span class="badge badge-p3">Phase 3</span></div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 12</div><div class="ind-name">Identifies assumptions, gaps, or contradictions</div></div><span class="badge badge-p3">Phase 3</span></div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 13</div><div class="ind-name">Evaluates relevance of information</div></div><span class="badge badge-p3">Phase 3</span></div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 14</div><div class="ind-name">Breaks down complex problems</div></div><span class="badge badge-p3">Phase 3</span></div>
+            <div class="cluster-section">Cluster 2 — Insight Synthesis (4)</div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 15</div><div class="ind-name">Identifies relationships across data points</div></div><span class="badge badge-p3">Phase 3</span></div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 16</div><div class="ind-name">Recognizes patterns, themes, and root causes</div></div><span class="badge badge-p3">Phase 3</span></div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 17</div><div class="ind-name">Synthesizes evidence into insights</div></div><span class="badge badge-p3">Phase 3</span></div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 18</div><div class="ind-name">Organizes insights with clear logical structure</div></div><span class="badge badge-p3">Phase 3</span></div>
+            <div class="cluster-section">Cluster 3 — Decision Framing (4)</div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 19</div><div class="ind-name">Clearly frames the decision or direction</div></div><span class="badge badge-p3">Phase 3</span></div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 20</div><div class="ind-name">Connects recommendations to evidence</div></div><span class="badge badge-p3">Phase 3</span></div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 21</div><div class="ind-name">Addresses uncertainty and trade-offs</div></div><span class="badge badge-p3">Phase 3</span></div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 22</div><div class="ind-name">Provides logical, feasible recommendation</div></div><span class="badge badge-p3">Phase 3</span></div>
+        </div>
+        <div id="rProf" class="tab-content">
+            <div class="cluster-section">Cluster 1 — Professional Self-Efficacy (4)</div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 23</div><div class="ind-name">Communicates with clarity and presence</div></div><span class="badge badge-p4">Phase 4</span></div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 24</div><div class="ind-name">Asks questions and seeks clarification confidently</div></div><span class="badge badge-p4">Phase 4</span></div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 25</div><div class="ind-name">Demonstrates comfort in formal environments</div></div><span class="badge badge-p4">Phase 4</span></div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 26</div><div class="ind-name">Expresses calibrated confidence</div></div><span class="badge badge-p4">Phase 4</span></div>
+            <div class="cluster-section">Cluster 2 — Initiative and Action-Taking (4)</div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 27</div><div class="ind-name">Begins tasks without excessive reassurance</div></div><span class="badge badge-p4">Phase 4</span></div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 28</div><div class="ind-name">Takes purposeful action under ambiguity</div></div><span class="badge badge-p4">Phase 4</span></div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 29</div><div class="ind-name">Identifies needed resources and concrete steps</div></div><span class="badge badge-p4">Phase 4</span></div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 30</div><div class="ind-name">Demonstrates persistence and ownership</div></div><span class="badge badge-p4">Phase 4</span></div>
+            <div class="cluster-section">Cluster 3 — Growth-Oriented Mindset (4)</div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 31</div><div class="ind-name">Interprets feedback as information for improvement</div></div><span class="badge badge-p4">Phase 4</span></div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 32</div><div class="ind-name">Reflects on learning with concrete examples</div></div><span class="badge badge-p4">Phase 4</span></div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 33</div><div class="ind-name">Responds to setbacks by adjusting strategies</div></div><span class="badge badge-p4">Phase 4</span></div>
+            <div class="indicator-item"><div><div class="ind-num">Indicator 34</div><div class="ind-name">Demonstrates openness to experimentation</div></div><span class="badge badge-p4">Phase 4</span></div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ AI TRANSPARENCY VIEW ══════════ -->
+<div id="transparencyView" class="view">
+    <div class="page-title">AI Transparency</div>
+    <div class="page-sub">How RubricAI ensures ethical, transparent, and fair evaluation of students</div>
+
+    <div class="kpi-grid">
+        <div class="kpi-card purple"><div class="kpi-label">Evidence Required</div><div class="kpi-value" style="font-size:16px;padding-top:6px;">Every Score</div><div class="kpi-meta">Backed by transcript quotes</div></div>
+        <div class="kpi-card green"><div class="kpi-label">Human Oversight</div><div class="kpi-value" style="font-size:16px;padding-top:6px;">Always</div><div class="kpi-meta">Instructor reviews all scores</div></div>
+        <div class="kpi-card amber"><div class="kpi-label">Override Control</div><div class="kpi-value" style="font-size:16px;padding-top:6px;">100%</div><div class="kpi-meta">Instructor has final say</div></div>
+        <div class="kpi-card red"><div class="kpi-label">External Storage</div><div class="kpi-value" style="font-size:16px;padding-top:6px;">None</div><div class="kpi-meta">Data stays on your machine</div></div>
+    </div>
+
+    <div class="alert alert-success">Core Principle: AI assists the evaluation. Humans validate it. The rubric governs both. No student is scored without evidence. No score is final without instructor review.</div>
+
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-title">6 Principles of Responsible Evaluation</div>
+            <div class="principle-card"><div class="principle-icon">1</div><div><div class="principle-title">Evidence-Based Scoring</div><div class="principle-text">Every score is backed by actual quotes from the student transcript. Claude never assigns a level without finding specific behavioral evidence.</div></div></div>
+            <div class="principle-card"><div class="principle-icon">2</div><div><div class="principle-title">Rubric-Governed Evaluation</div><div class="principle-text">All evaluations are grounded in Harry's published research-backed rubric. The rubric defines Level 1–4. Claude matches evidence to those definitions.</div></div></div>
+            <div class="principle-card"><div class="principle-icon">3</div><div><div class="principle-title">Confidence Transparency</div><div class="principle-text">Claude returns a confidence score with every evaluation. Low confidence (below 60%) is automatically flagged for instructor review.</div></div></div>
+            <div class="principle-card"><div class="principle-icon">4</div><div><div class="principle-title">Instructor Override</div><div class="principle-text">Every AI score can be overridden by the instructor. The AI assists — not replaces — professional educator judgment.</div></div></div>
+            <div class="principle-card"><div class="principle-icon">5</div><div><div class="principle-title">Data Privacy</div><div class="principle-text">Student data is processed locally. No data is stored externally. Exports download directly to your computer.</div></div></div>
+            <div class="principle-card"><div class="principle-icon">6</div><div><div class="principle-title">Consistency and Fairness</div><div class="principle-text">Every student is evaluated against the same rubric by the same AI model. Eliminates evaluator bias and fatigue.</div></div></div>
+        </div>
+
+        <div>
+            <div class="card">
+                <div class="card-title">Hard vs Easy Indicators</div>
+                <div style="margin-bottom:12px;">
+                    <div style="font-size:11px;font-weight:700;color:#34d399;text-transform:uppercase;margin-bottom:8px;">Easy — Countable Behaviors</div>
+                    <div style="background:#0a0f1e;border-radius:8px;padding:14px;border:1px solid #1f2937;font-size:12px;color:#9ca3af;line-height:1.8;">
+                        <div style="margin-bottom:6px;"><strong style="color:#f9fafb;">Example: Asks open-ended questions</strong></div>
+                        <div>Count open-ended vs closed questions</div>
+                        <div>Match count to rubric threshold</div>
+                        <div>High confidence · AI scores reliably</div>
+                    </div>
+                </div>
+                <div>
+                    <div style="font-size:11px;font-weight:700;color:#fbbf24;text-transform:uppercase;margin-bottom:8px;">Hard — Behavioral Patterns</div>
+                    <div style="background:#0a0f1e;border-radius:8px;padding:14px;border:1px solid #1f2937;font-size:12px;color:#9ca3af;line-height:1.8;">
+                        <div style="margin-bottom:6px;"><strong style="color:#f9fafb;">Example: Active listening · Rapport</strong></div>
+                        <div>Detect behavioral patterns in transcript</div>
+                        <div>Look for paraphrasing, callbacks, tone</div>
+                        <div>Lower confidence · Auto-flagged for review</div>
+                    </div>
+                </div>
+                <div class="alert alert-amber mt-3">Hard indicators are always flagged for human review when confidence is low. The AI provides its best assessment with evidence, but defers to instructor judgment.</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Confidence Thresholds</div>
+                <div style="display:flex;flex-direction:column;gap:6px;">
+                    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#0a0f1e;border-radius:7px;border-left:3px solid #10b981;">
+                        <div style="font-size:13px;font-weight:800;color:#34d399;min-width:60px;">80–100%</div>
+                        <div><div style="font-size:12px;font-weight:600;color:#f9fafb;">High Confidence</div><div style="font-size:11px;color:#4b5563;">Clear evidence found in transcript</div></div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#0a0f1e;border-radius:7px;border-left:3px solid #f59e0b;">
+                        <div style="font-size:13px;font-weight:800;color:#fbbf24;min-width:60px;">60–79%</div>
+                        <div><div style="font-size:12px;font-weight:600;color:#f9fafb;">Medium Confidence</div><div style="font-size:11px;color:#4b5563;">Some ambiguity in transcript</div></div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#0a0f1e;border-radius:7px;border-left:3px solid #ef4444;">
+                        <div style="font-size:13px;font-weight:800;color:#f87171;min-width:60px;">Below 60%</div>
+                        <div><div style="font-size:12px;font-weight:600;color:#f9fafb;">Low Confidence — Flagged</div><div style="font-size:11px;color:#4b5563;">Instructor review required</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ ABOUT VIEW ══════════ -->
+<div id="aboutView" class="view">
+    <div class="page-title">About RubricAI</div>
+    <div class="page-sub">AI-powered evaluation platform for student interview assessment</div>
+
+    <div class="card">
+        <div class="card-title">Project Overview</div>
+        <p style="color:#d1d5db;font-size:13px;line-height:1.9;margin-bottom:12px;">RubricAI evaluates student interview transcripts against a 34-indicator behavioral rubric. Built for CPS LEARN Lab at Northeastern University, it provides consistent, evidence-based scoring — replacing manual, subjective review with scalable AI-assisted assessment that instructors validate and control.</p>
+        <p style="color:#d1d5db;font-size:13px;line-height:1.9;">The tool evaluates student communication, critical thinking, and professional agency skills as demonstrated in interview simulations. All evaluations are grounded in research-backed rubric criteria.</p>
+    </div>
+
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-title">Scoring Methodology</div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+                <div style="padding:10px 14px;background:#0a0f1e;border-radius:7px;font-size:12px;color:#9ca3af;display:flex;justify-content:space-between;align-items:center;"><span>AI Engine</span><span style="color:#f9fafb;font-weight:600;">Claude AI (Anthropic)</span></div>
+                <div style="padding:10px 14px;background:#0a0f1e;border-radius:7px;font-size:12px;color:#9ca3af;display:flex;justify-content:space-between;align-items:center;"><span>Rubric Input</span><span style="color:#f9fafb;font-weight:600;">Uploaded file — no hardcoding</span></div>
+                <div style="padding:10px 14px;background:#0a0f1e;border-radius:7px;font-size:12px;color:#9ca3af;display:flex;justify-content:space-between;align-items:center;"><span>Scoring Range</span><span style="color:#f9fafb;font-weight:600;">Level 1–4 per indicator</span></div>
+                <div style="padding:10px 14px;background:#0a0f1e;border-radius:7px;font-size:12px;color:#9ca3af;display:flex;justify-content:space-between;align-items:center;"><span>Confidence</span><span style="color:#f9fafb;font-weight:600;">0–100% per evaluation</span></div>
+                <div style="padding:10px 14px;background:#0a0f1e;border-radius:7px;font-size:12px;color:#9ca3af;display:flex;justify-content:space-between;align-items:center;"><span>Override</span><span style="color:#f9fafb;font-weight:600;">Full instructor control</span></div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-title">Tech Stack</div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+                <div style="padding:10px 14px;background:#0a0f1e;border-radius:7px;font-size:12px;color:#9ca3af;display:flex;justify-content:space-between;"><span>Backend</span><span style="color:#f9fafb;font-weight:600;">Python · FastAPI</span></div>
+                <div style="padding:10px 14px;background:#0a0f1e;border-radius:7px;font-size:12px;color:#9ca3af;display:flex;justify-content:space-between;"><span>AI</span><span style="color:#f9fafb;font-weight:600;">Claude AI (Anthropic)</span></div>
+                <div style="padding:10px 14px;background:#0a0f1e;border-radius:7px;font-size:12px;color:#9ca3af;display:flex;justify-content:space-between;"><span>Frontend</span><span style="color:#f9fafb;font-weight:600;">HTML · CSS · JavaScript</span></div>
+                <div style="padding:10px 14px;background:#0a0f1e;border-radius:7px;font-size:12px;color:#9ca3af;display:flex;justify-content:space-between;"><span>Export</span><span style="color:#f9fafb;font-weight:600;">PDF (ReportLab) · CSV</span></div>
+                <div style="padding:10px 14px;background:#0a0f1e;border-radius:7px;font-size:12px;color:#9ca3af;display:flex;justify-content:space-between;"><span>Deployment</span><span style="color:#f9fafb;font-weight:600;">Vercel (planned)</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">Development Roadmap</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="padding:14px;background:#0a0f1e;border-radius:8px;border:1px solid #10b981;"><div style="font-size:13px;font-weight:700;color:#34d399;">Phase 1 — Complete (February 2026)</div><div style="font-size:12px;color:#4b5563;margin-top:3px;">Indicator 1 validated · Claude API · Evidence scoring · Override · Export</div></div>
+            <div style="padding:14px;background:#0a0f1e;border-radius:8px;border:1px solid #1f2937;"><div style="font-size:13px;font-weight:700;color:#818cf8;">Phase 2 — March 2026</div><div style="font-size:12px;color:#4b5563;margin-top:3px;">Communication domain · 10 indicators · Cluster scoring</div></div>
+            <div style="padding:14px;background:#0a0f1e;border-radius:8px;border:1px solid #1f2937;"><div style="font-size:13px;font-weight:700;color:#c084fc;">Phase 3 — April 2026</div><div style="font-size:12px;color:#4b5563;margin-top:3px;">Critical Thinking · 12 indicators · Hard indicator behavioral detection</div></div>
+            <div style="padding:14px;background:#0a0f1e;border-radius:8px;border:1px solid #1f2937;"><div style="font-size:13px;font-weight:700;color:#5eead4;">Phase 4 — May 2026</div><div style="font-size:12px;color:#4b5563;margin-top:3px;">Professional Agency · 12 indicators · Full export · Vercel deployment</div></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">Built By</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;">
+            <div style="background:#0a0f1e;border:1px solid #1f2937;border-radius:8px;padding:16px 20px;flex:1;min-width:180px;">
+                <div style="font-size:14px;font-weight:700;color:#f9fafb;margin-bottom:4px;">Tanvi Kadam</div>
+                <div style="font-size:12px;color:#4b5563;">Developer · MS Applied Machine Intelligence<br>Northeastern University</div>
+            </div>
+            <div style="background:#0a0f1e;border:1px solid #1f2937;border-radius:8px;padding:16px 20px;flex:1;min-width:180px;">
+                <div style="font-size:14px;font-weight:700;color:#f9fafb;margin-bottom:4px;">CPS LEARN Lab</div>
+                <div style="font-size:12px;color:#4b5563;">Harry Son · Chris Unger · Allison Ruda<br>Northeastern University</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    </div><!-- end content -->
+</div><!-- end main -->
+
+<script>
+const API='http://127.0.0.1:8000';
+let studentData={};
+let currentSid=null;
+
+const viewMeta={
+    upload:['Upload and Evaluate','Upload student interview transcripts for AI evaluation'],
+    students:['Students','AI-generated evaluations with scoring hierarchy'],
+    profile:['Student Profile','Individual evaluation with evidence and scoring breakdown'],
+    rubric:['Rubric Framework','34 research-backed behavioral indicators across 3 domains'],
+    transparency:['AI Transparency','Ethical AI use, confidence scoring, and human oversight'],
+    about:['About RubricAI','Technology, methodology, and development roadmap'],
+};
+
+const navOrder=['upload','students','rubric','transparency','about'];
+
+function showView(view,sid){
+    if(sid)currentSid=sid;
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach((el,i)=>el.classList.toggle('active',navOrder[i]===view));
+    const t=document.getElementById(view+'View');
+    if(t)t.classList.add('active');
+    const m=viewMeta[view]||viewMeta.upload;
+    document.getElementById('topbarTitle').textContent=m[0];
+    document.getElementById('topbarMeta').textContent=m[1];
+    const showExport=view==='students'||view==='profile';
+    document.getElementById('exportAllBtn').style.display=showExport?'inline-flex':'none';
+    document.getElementById('exportPDFBtn').style.display=showExport?'inline-flex':'none';
+    if(view==='students')renderStudents();
+    if(view==='profile')renderProfile(currentSid);
+}
+
+// ── DEMO DATA ──
+function loadDemoData(){
+    studentData={
+        '1':{id:'1',name:'Student 1',
+            evaluations:[
+                {student_id:'1',simulation:'A',indicator:'Asks clear, open-ended questions',level:3,confidence:0.92,open_ended_count:24,closed_count:5,total_questions:29,strategic_phrasing_count:2,
+                 open_ended_examples:['Can you walk me through your typical morning routine?','What specifically has been frustrating about the new system?','How did you approach solving that problem?'],
+                 closed_examples:['Is that correct?'],
+                 justification:'Student asked 24 open-ended questions exceeding the Level 3 threshold. Questions were clearly phrased with minimal clarification needed. Two instances of strategic phrasing detected. Does not yet reach Level 4 as storytelling invitations were limited.',
+                 strengths:'Excellent question volume and clarity. Good use of experience-based questions. Questions focus on one topic at a time.',
+                 improvements:'Incorporate more strategic phrasing and invite storytelling more frequently to reach Level 4.'},
+                {student_id:'1',simulation:'B',indicator:'Asks clear, open-ended questions',level:2,confidence:0.88,open_ended_count:3,closed_count:0,total_questions:3,strategic_phrasing_count:0,
+                 open_ended_examples:['What are your main concerns?','How can we improve this?'],
+                 closed_examples:[],
+                 justification:'Student asked 3 open-ended questions meeting Level 2 threshold. No strategic phrasing or storytelling invitations observed.',
+                 strengths:'Questions were relevant and clearly phrased.',
+                 improvements:'Increase question volume to 4-5 per segment to reach Level 3. Add strategic phrasing.'}
+            ],
+            scores:{overall:2.5,domains:{'Communication':{score:2.5,clusters:{'Interview Communication':2.5,'Communicating Ideas Clearly':null}},'Critical Thinking':{score:null,clusters:{}},'Professional Agency':{score:null,clusters:{}}}}
+        },
+        '2':{id:'2',name:'Student 2',
+            evaluations:[
+                {student_id:'2',simulation:'A',indicator:'Asks clear, open-ended questions',level:2,confidence:0.85,open_ended_count:3,closed_count:1,total_questions:4,strategic_phrasing_count:0,
+                 open_ended_examples:['What do you think about this?','How does that work?'],
+                 closed_examples:['Is that right?'],
+                 justification:'Student asked 3 open-ended questions meeting Level 2. Questions lacked strategic phrasing. One closed question observed.',
+                 strengths:'Basic questioning competence demonstrated. Questions were relevant.',
+                 improvements:'Increase volume and use strategic phrasing like "Walk me through..."'},
+                {student_id:'2',simulation:'B',indicator:'Asks clear, open-ended questions',level:1,confidence:0.95,open_ended_count:0,closed_count:0,total_questions:0,strategic_phrasing_count:0,
+                 open_ended_examples:[],closed_examples:[],
+                 justification:'Student asked 0 questions during the interview. Student did not engage with the questioning task at all.',
+                 strengths:'None identified in this performance.',
+                 improvements:'Student must actively ask questions. Aim for at least 2-3 open-ended questions to reach Level 2.'}
+            ],
+            scores:{overall:1.5,domains:{'Communication':{score:1.5,clusters:{'Interview Communication':1.5,'Communicating Ideas Clearly':null}},'Critical Thinking':{score:null,clusters:{}},'Professional Agency':{score:null,clusters:{}}}}
+        }
+    };
+    updateCount();
+    showView('students');
+}
+
+function processAPIResponse(data){
+    studentData={};
+    (data.students||[]).forEach(s=>{studentData[s.student_id]={id:s.student_id,name:`Student ${s.student_id}`,evaluations:s.results||[],scores:s.scores||{}};});
+    updateCount();
+}
+
+function updateCount(){
+    const el=document.getElementById('studentCount');
+    if(el)el.textContent=Object.keys(studentData).length;
+}
+
+// ── RENDER STUDENTS ──
+function renderStudents(){
+    const students=Object.values(studentData);
+    const noData=document.getElementById('noData');
+    const list=document.getElementById('studentsList');
+    const reviewBanner=document.getElementById('reviewBanner');
+
+    if(!students.length){
+        if(noData)noData.style.display='block';
+        if(list)list.innerHTML='';
+        if(reviewBanner)reviewBanner.style.display='none';
+        return;
+    }
+    if(noData)noData.style.display='none';
+
+    const allLevels=students.flatMap(s=>s.evaluations.map(e=>e.level));
+    const avg=allLevels.length?(allLevels.reduce((a,b)=>a+b,0)/allLevels.length).toFixed(1):'--';
+    const flagged=students.filter(s=>s.evaluations.some(e=>e.level===1||(e.confidence&&e.confidence<0.6)));
+
+    document.getElementById('sTotal').textContent=students.length;
+    document.getElementById('sEvals').textContent=allLevels.length;
+    document.getElementById('sAvg').textContent=avg;
+    document.getElementById('sReview').textContent=flagged.length;
+
+    if(flagged.length>0&&reviewBanner){
+        reviewBanner.style.display='flex';
+        document.getElementById('reviewBannerText').textContent=`${flagged.length} student(s) need instructor review`;
+    } else if(reviewBanner){reviewBanner.style.display='none';}
+
+    list.innerHTML=students.map(s=>{
+        const overall=s.scores.overall;
+        const domains=s.scores.domains||{};
+        const review=s.evaluations.some(e=>e.level===1||(e.confidence&&e.confidence<0.6));
+        const lvl=getLvl(overall||0);
+        const commScore=domains['Communication']?.score;
+        const critScore=domains['Critical Thinking']?.score;
+        const profScore=domains['Professional Agency']?.score;
+
+        return `
+        <div class="student-card ${review?'flagged':''}" onclick="showView('profile','${s.id}')">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+                <div>
+                    <div style="font-size:16px;font-weight:700;color:#f9fafb;">${s.name}</div>
+                    <div style="font-size:11px;color:#4b5563;margin-top:2px;">${s.evaluations.length} evaluation(s) · Indicator 1 active</div>
+                </div>
+                <div style="display:flex;gap:6px;align-items:center;">
+                    <span class="badge badge-${lvl}">Overall ${overall||'N/A'} / 4.0</span>
+                    ${review?'<span class="badge badge-review">Review Needed</span>':''}
+                </div>
+            </div>
+            <div class="domain-circles">
+                ${domainCircleHtml('Communication',commScore,'#6366f1')}
+                ${domainCircleHtml('Critical Thinking',critScore,'#8b5cf6')}
+                ${domainCircleHtml('Prof. Agency',profScore,'#06b6d4')}
+            </div>
+            <div style="margin-top:8px;">
+                ${levelBarHtml(overall||0)}
+            </div>
+            <div style="display:flex;gap:7px;margin-top:12px;">
+                <button class="btn btn-sm" onclick="event.stopPropagation();showView('profile','${s.id}')">View Profile</button>
+                <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation();exportStudentCSV('${s.id}')">Export CSV</button>
+                <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation();exportPDF()">Export PDF</button>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function domainCircleHtml(name,score,color){
+    const val=score||0;
+    const pct=Math.min((val/4)*100,100);
+    const r=28;const circ=2*Math.PI*r;
+    const offset=circ-(pct/100)*circ;
+    return `
+    <div class="domain-circle-box">
+        <div class="domain-circle-name">${name}</div>
+        <div class="circle-wrap">
+            <svg width="64" height="64" viewBox="0 0 64 64">
+                <circle class="circle-bg" cx="32" cy="32" r="${r}"/>
+                <circle class="circle-fill" cx="32" cy="32" r="${r}" stroke="${color}"
+                    stroke-dasharray="${circ}" stroke-dashoffset="${score?offset:circ}"/>
+            </svg>
+            <div class="circle-text" style="color:${color};">${score||'--'}</div>
+        </div>
+    </div>`;
+}
+
+function levelBarHtml(score){
+    const lvl=getLvl(score);
+    let h='<div class="level-bar">';
+    for(let i=1;i<=4;i++)h+=`<div class="ls ${i<=lvl?'f'+lvl:''}"></div>`;
+    return h+'</div>';
+}
+
+// ── RENDER PROFILE ──
+function renderProfile(sid){
+    if(!sid||!studentData[sid]){showView('students');return;}
+    const s=studentData[sid];
+    const scores=s.scores||{};
+    const domains=scores.domains||{};
+
+    document.getElementById('pName').textContent=s.name;
+    document.getElementById('pMeta').textContent=`Student ID: ${s.id}  |  ${s.evaluations.length} evaluation(s) completed  |  Indicator 1 active`;
+    document.getElementById('pOverall').textContent=scores.overall||'--';
+    document.getElementById('pComm').textContent=domains['Communication']?.score||'--';
+    document.getElementById('pCrit').textContent=domains['Critical Thinking']?.score||'--';
+    document.getElementById('pProf').textContent=domains['Professional Agency']?.score||'--';
+
+    // Hierarchy
+    const commScore=domains['Communication']?.score;
+    const commCluster=domains['Communication']?.clusters?.['Interview Communication'];
+    document.getElementById('hIndicator').textContent=s.evaluations[0]?.level||'--';
+    document.getElementById('hCluster').textContent=commCluster||'--';
+    document.getElementById('hDomain').textContent=commScore||'--';
+    document.getElementById('hOverall').textContent=scores.overall||'--';
+
+    // Domain circles
+    document.getElementById('domainCircles').innerHTML=
+        domainCircleHtml('Communication',domains['Communication']?.score,'#6366f1')+
+        domainCircleHtml('Critical Thinking',domains['Critical Thinking']?.score,'#8b5cf6')+
+        domainCircleHtml('Professional Agency',domains['Professional Agency']?.score,'#06b6d4');
+
+    document.getElementById('exportStudentCSVBtn').onclick=()=>exportStudentCSV(sid);
+    document.getElementById('exportStudentPDFBtn').onclick=()=>exportPDF();
+
+    // Cluster scores
+    let ch='';
+    Object.entries(domains).forEach(([domain,info])=>{
+        const cls=Object.entries(info.clusters||{}).filter(([,v])=>v!==null);
+        if(!cls.length)return;
+        ch+=`<div class="card" style="margin-bottom:12px;"><div style="font-size:11px;font-weight:700;color:#6366f1;text-transform:uppercase;margin-bottom:10px;">${domain}</div>${cls.map(([c,v])=>`<div class="cluster-row"><span class="cluster-label">${c}</span><div style="display:flex;align-items:center;gap:10px;">${levelBarHtml(Math.round(v))}<span class="cluster-val">${v} / 4.0</span></div></div>`).join('')}</div>`;
+    });
+    document.getElementById('clusterScores').innerHTML=ch||'<div class="card"><p style="color:#4b5563;font-size:12px;">Only Indicator 1 is active. Cluster scores available from Phase 2 onwards.</p></div>';
+
+    // Evaluations
+    const flagged=s.evaluations.filter(e=>e.level===1||(e.confidence&&e.confidence<0.6));
+    let html=flagged.length?`<div class="alert alert-warning" style="margin-bottom:16px;">${flagged.length} evaluation(s) flagged — Level 1 score or low confidence. Instructor review recommended.</div>`:'';
+
+    html+=s.evaluations.map((ev,idx)=>{
+        const isFlag=ev.level===1||(ev.confidence&&ev.confidence<0.6);
+        const conf=ev.confidence?Math.round(ev.confidence*100):null;
+        return `
+        <div class="card" style="margin-bottom:12px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+                <div>
+                    <div style="font-size:15px;font-weight:700;color:#f9fafb;">Simulation ${ev.simulation}</div>
+                    <div style="font-size:11px;color:#4b5563;margin-top:2px;">${ev.indicator}</div>
+                </div>
+                <div style="display:flex;gap:6px;align-items:center;">
+                    <span class="badge badge-${ev.level}">Level ${ev.level} / 4</span>
+                    ${isFlag?'<span class="badge badge-review">Review Needed</span>':''}
+                    ${ev.overridden?'<span class="badge badge-override">Overridden</span>':''}
+                </div>
+            </div>
+
+            ${levelBarHtml(ev.level)}
+
+            <div class="level-def">
+                <strong style="color:#818cf8;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;">Level ${ev.level} Definition</strong><br>
+                ${getLevelDef(ev.level)}
+            </div>
+
+            <div class="metric-grid">
+                <div class="metric-box"><div class="metric-value ${ev.open_ended_count>=4?'good':''}">${ev.open_ended_count??'--'}</div><div class="metric-label">Open-Ended</div></div>
+                <div class="metric-box"><div class="metric-value">${ev.closed_count??'--'}</div><div class="metric-label">Closed</div></div>
+                <div class="metric-box"><div class="metric-value">${ev.total_questions??'--'}</div><div class="metric-label">Total Qs</div></div>
+                <div class="metric-box"><div class="metric-value ${conf&&conf<60?'flagged':conf&&conf>=80?'good':''}">${conf?conf+'%':'--'}</div><div class="metric-label">AI Confidence</div></div>
+            </div>
+
+            <div class="ev-box ${isFlag?'flag':''}">
+                <div class="ev-title">AI Justification</div>
+                <div class="ev-text">${ev.justification||'--'}</div>
+            </div>
+
+            ${ev.open_ended_examples?.length?`
+            <div class="ev-box ok">
+                <div class="ev-title">Evidence — Questions Found in Transcript</div>
+                <ul class="quote-list">${ev.open_ended_examples.slice(0,4).map(q=>`<li>"${q}"</li>`).join('')}</ul>
+            </div>`:''}
+
+            <div class="grid-2" style="margin-top:10px;">
+                <div class="ev-box ok"><div class="ev-title">Strengths</div><div class="ev-text">${ev.strengths||'--'}</div></div>
+                <div class="ev-box ${isFlag?'flag':''}"><div class="ev-title">Areas for Improvement</div><div class="ev-text">${ev.improvements||'--'}</div></div>
+            </div>
+
+            <div class="override-row">
+                <span class="override-label">Instructor Override:</span>
+                <select class="override-select" id="ovr-${sid}-${idx}">
+                    <option value="">Keep AI Score (Level ${ev.level})</option>
+                    <option value="1">Override to Level 1</option>
+                    <option value="2">Override to Level 2</option>
+                    <option value="3">Override to Level 3</option>
+                    <option value="4">Override to Level 4</option>
+                </select>
+                <button class="btn btn-secondary btn-sm" onclick="applyOverride('${sid}',${idx})">Apply Override</button>
+                <span id="ovrNote-${sid}-${idx}" style="font-size:11px;color:#34d399;display:none;">Override applied and scores recalculated</span>
+            </div>
+        </div>`;
+    }).join('');
+    document.getElementById('pEvals').innerHTML=html;
+}
+
+function showProfileTab(tab,el){
+    document.querySelectorAll('.profile-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.profile-tab-content').forEach(c=>c.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('pt'+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.add('active');
+}
+
+function applyOverride(sid,idx){
+    const sel=document.getElementById(`ovr-${sid}-${idx}`);
+    const val=parseInt(sel.value);
+    if(!val)return;
+    studentData[sid].evaluations[idx].level=val;
+    studentData[sid].evaluations[idx].overridden=true;
+    const levels=studentData[sid].evaluations.map(e=>e.level);
+    const avg=Math.round((levels.reduce((a,b)=>a+b,0)/levels.length)*100)/100;
+    if(studentData[sid].scores.domains?.['Communication']){
+        studentData[sid].scores.domains['Communication'].score=avg;
+        studentData[sid].scores.domains['Communication'].clusters['Interview Communication']=avg;
+    }
+    studentData[sid].scores.overall=avg;
+    const note=document.getElementById(`ovrNote-${sid}-${idx}`);
+    if(note){note.style.display='inline';setTimeout(()=>note.style.display='none',3000);}
+    setTimeout(()=>renderProfile(sid),400);
+}
+
+// ── UPLOAD ──
+const dropZone=document.getElementById('dropZone');
+const fileInput=document.getElementById('fileInput');
+dropZone.addEventListener('click',()=>fileInput.click());
+dropZone.addEventListener('dragover',e=>{e.preventDefault();dropZone.classList.add('dragover');});
+dropZone.addEventListener('dragleave',()=>dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop',e=>{e.preventDefault();dropZone.classList.remove('dragover');if(e.dataTransfer.files.length)handleFile(e.dataTransfer.files[0]);});
+fileInput.addEventListener('change',e=>{if(e.target.files.length)handleFile(e.target.files[0]);});
+
+function handleFile(file){
+    window._file=file;
+    dropZone.innerHTML=`<div style="font-size:14px;font-weight:600;color:#34d399;margin-bottom:4px;">${file.name}</div><div style="font-size:12px;color:#4b5563;">${(file.size/1024).toFixed(1)} KB — Ready to evaluate</div>`;
+    document.getElementById('uploadBtn').disabled=false;
+}
+
+async function processUpload(){
+    const file=window._file;if(!file)return;
+    document.getElementById('uploadBtn').disabled=true;
+    document.getElementById('progressSection').style.display='block';
+    let prog=0;
+    const iv=setInterval(()=>{prog=Math.min(prog+Math.random()*10,90);document.getElementById('progressFill').style.width=prog+'%';document.getElementById('progressText').textContent=Math.round(prog)+'%';},400);
+    try{
+        const fd=new FormData();fd.append('file',file);
+        const res=await fetch(`${API}/api/evaluate`,{method:'POST',body:fd});
+        const data=await res.json();
+        clearInterval(iv);
+        document.getElementById('progressFill').style.width='100%';
+        document.getElementById('progressText').textContent='100%';
+        if(data.status==='success'){processAPIResponse(data);setTimeout(()=>showView('students'),600);}
+        else{showMsg('error',data.message||'Evaluation failed.');document.getElementById('uploadBtn').disabled=false;}
+    }catch(e){
+        clearInterval(iv);
+        showMsg('error','Cannot connect to backend. Make sure server is running on port 8000.');
+        document.getElementById('uploadBtn').disabled=false;
+    }
+}
+
+function showMsg(type,msg){
+    const s={success:'background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);color:#6ee7b7;',error:'background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);color:#fca5a5;'};
+    document.getElementById('statusMsg').innerHTML=`<div style="padding:10px 14px;border-radius:8px;font-size:12px;${s[type]}">${msg}</div>`;
+}
+
+// ── EXPORTS ──
+function exportAllCSV(){
+    const students=Object.values(studentData);
+    if(!students.length){alert('No data to export.');return;}
+    let csv='Student ID,Communication,Critical Thinking,Professional Agency,Overall\n';
+    students.forEach(s=>{const d=s.scores.domains||{};csv+=`${s.id},${d['Communication']?.score||'N/A'},${d['Critical Thinking']?.score||'N/A'},${d['Professional Agency']?.score||'N/A'},${s.scores.overall||'N/A'}\n`;});
+    dlBlob(csv,'rubricai_all_scores.csv','text/csv');
+}
+
+function exportStudentCSV(sid){
+    const s=studentData[sid];if(!s)return;
+    let csv='Student ID,Simulation,Indicator,Level,Overridden,Confidence,Open-Ended,Total Qs,Justification\n';
+    s.evaluations.forEach(e=>{csv+=`${e.student_id},${e.simulation},"${e.indicator}",${e.level},${e.overridden||false},${e.confidence||''},${e.open_ended_count||0},${e.total_questions||0},"${(e.justification||'').replace(/"/g,"'")}"\n`;});
+    dlBlob(csv,`student_${sid}_report.csv`,'text/csv');
+}
+
+async function exportPDF(){
+    const students=Object.values(studentData);
+    if(!students.length){alert('No data to export.');return;}
+    try{
+        const res=await fetch(`${API}/api/export/pdf`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({students:students.map(s=>({student_id:s.id,results:s.evaluations,scores:s.scores}))})});
+        if(!res.ok)throw new Error();
+        const blob=await res.blob();const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='rubricai_report.pdf';a.click();URL.revokeObjectURL(url);
+    }catch(e){alert('PDF export failed. Make sure backend is running on port 8000.');}
+}
+
+function dlBlob(content,filename,type){const blob=new Blob([content],{type});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;a.click();URL.revokeObjectURL(url);}
+
+// ── TABS ──
+function showTab(tab,el){
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+    el.classList.add('active');
+    const map={comm:'rComm',crit:'rCrit',prof:'rProf'};
+    document.getElementById(map[tab]).classList.add('active');
+}
+
+// ── HELPERS ──
+function getLvl(s){if(s>=3.5)return 4;if(s>=2.5)return 3;if(s>=1.5)return 2;return 1;}
+const levelDefs={
+    1:'Asks 0–1 open-ended questions per 10-min segment. Questions are vague or confusing. Phrasing may be unclear or leading. Does not invite storytelling.',
+    2:'Asks 2–3 open-ended questions per 10-min segment. Sometimes vague. Clear phrasing, no leading phrases. Does not invite storytelling.',
+    3:'Asks 4–5 open-ended questions per 10-min segment. Clearly phrased, minimal clarification needed. Questions focus on one topic at a time.',
+    4:'Asks 6+ open-ended questions per 10-min segment. Strategic phrasing 3–5 times. Invites storytelling 2–4 times.'
+};
+function getLevelDef(l){return levelDefs[l]||'';}
+</script>
+</body>
+</html>

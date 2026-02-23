@@ -1,0 +1,235 @@
+<!-- Student Profile Page -->
+
+<div style="margin-bottom:20px;">
+    <span style="color:#64748b;font-size:13px;cursor:pointer;" onclick="loadPage('students')">← Back to Students</span>
+</div>
+
+<div class="page-header">
+    <div class="page-title" id="pName">Student Profile</div>
+    <div class="page-subtitle" id="pMeta"></div>
+</div>
+
+<!-- Domain Scores -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-label">Overall Score</div>
+        <div class="stat-value" id="pOverall">--</div>
+        <div class="stat-meta">/ 4.0</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Communication</div>
+        <div class="stat-value" id="pComm">--</div>
+        <div class="stat-meta">Domain avg</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Critical Thinking</div>
+        <div class="stat-value" id="pCrit">--</div>
+        <div class="stat-meta">Domain avg</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Prof. Agency</div>
+        <div class="stat-value" id="pProf">--</div>
+        <div class="stat-meta">Domain avg</div>
+    </div>
+</div>
+
+<!-- Scoring Hierarchy -->
+<div class="card">
+    <div class="card-title">Scoring Hierarchy</div>
+    <div class="hierarchy-flow">
+        <div class="hierarchy-step active">
+            Indicator Score<br>
+            <span style="font-size:10px;color:#667eea;">Level 1–4 each</span>
+        </div>
+        <div class="hierarchy-arrow">→</div>
+        <div class="hierarchy-step active">
+            Cluster Score<br>
+            <span style="font-size:10px;color:#667eea;">Avg of indicators</span>
+        </div>
+        <div class="hierarchy-arrow">→</div>
+        <div class="hierarchy-step active">
+            Domain Score<br>
+            <span style="font-size:10px;color:#667eea;">Avg of clusters</span>
+        </div>
+        <div class="hierarchy-arrow">→</div>
+        <div class="hierarchy-step active">
+            Overall Score<br>
+            <span style="font-size:10px;color:#667eea;" id="pOverallHierarchy">--</span>
+        </div>
+    </div>
+</div>
+
+<!-- Cluster Scores -->
+<div class="card">
+    <div class="card-title">Cluster Scores</div>
+    <div id="clusterScores"></div>
+</div>
+
+<!-- Evaluations -->
+<div class="card">
+    <div class="flex-between mb-4">
+        <div class="card-title" style="margin-bottom:0;">Interview Evaluations</div>
+        <div style="display:flex;gap:8px;">
+            <button class="btn btn-success btn-sm" id="exportBtn">Export CSV</button>
+            <button class="btn btn-success btn-sm" onclick="exportPDF()">Export PDF</button>
+        </div>
+    </div>
+    <div id="pEvaluations"></div>
+</div>
+
+<script>
+function initProfile(sid) {
+    if (!sid || !studentData[sid]) { loadPage('students'); return; }
+    const s = studentData[sid];
+    const scores = s.scores || {};
+    const domains = scores.domains || {};
+
+    document.getElementById('pName').textContent = s.name;
+    document.getElementById('pMeta').textContent = `Student ID: ${s.id}  |  ${s.evaluations.length} evaluation(s) completed`;
+    document.getElementById('pOverall').textContent = scores.overall || '--';
+    document.getElementById('pOverallHierarchy').textContent = scores.overall ? scores.overall + ' / 4.0' : '--';
+    document.getElementById('pComm').textContent = domains['Communication']?.score || '--';
+    document.getElementById('pCrit').textContent = domains['Critical Thinking']?.score || '--';
+    document.getElementById('pProf').textContent = domains['Professional Agency']?.score || '--';
+
+    document.getElementById('exportBtn').onclick = () => exportStudentCSV(sid);
+
+    // Cluster Scores
+    let clusterHtml = '';
+    Object.entries(domains).forEach(([domain, info]) => {
+        const clusters = Object.entries(info.clusters || {}).filter(([,v]) => v !== null);
+        if (!clusters.length) return;
+        clusterHtml += `
+            <div style="margin-bottom:14px;">
+                <div style="font-size:11px;font-weight:700;color:#667eea;text-transform:uppercase;margin-bottom:8px;">${domain}</div>
+                ${clusters.map(([c,v]) => `
+                    <div class="cluster-row">
+                        <span class="cluster-label">${c}</span>
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            ${levelBar(Math.round(v))}
+                            <span class="cluster-val">${v} / 4.0</span>
+                        </div>
+                    </div>`).join('')}
+            </div>`;
+    });
+    document.getElementById('clusterScores').innerHTML = clusterHtml ||
+        '<p style="color:#64748b;font-size:13px;">Only Indicator 1 is active. Cluster scores available from Phase 2 onwards.</p>';
+
+    // Flag alert
+    const flagged = s.evaluations.filter(e => e.level === 1 || (e.confidence && e.confidence < 0.6));
+    let html = flagged.length
+        ? `<div class="alert alert-warning">${flagged.length} evaluation(s) flagged — Level 1 score or low AI confidence. Instructor review recommended.</div>`
+        : '';
+
+    // Evaluations
+    html += s.evaluations.map((ev, idx) => {
+        const isFlag = ev.level === 1 || (ev.confidence && ev.confidence < 0.6);
+        const conf = ev.confidence ? Math.round(ev.confidence * 100) : null;
+
+        return `
+        <div style="margin-bottom:36px;padding-bottom:36px;${idx < s.evaluations.length-1 ? 'border-bottom:1px solid #1e293b;' : ''}">
+
+            <div class="flex-between" style="margin-bottom:16px;">
+                <div>
+                    <div style="font-size:17px;font-weight:700;">Simulation ${ev.simulation}</div>
+                    <div style="font-size:12px;color:#64748b;margin-top:2px;">${ev.indicator}</div>
+                </div>
+                <div style="display:flex;gap:8px;align-items:center;">
+                    <span class="badge badge-${ev.level}">Level ${ev.level} / 4</span>
+                    ${isFlag ? '<span class="badge badge-review">Review Needed</span>' : ''}
+                    ${ev.overridden ? '<span class="badge badge-active">Overridden</span>' : ''}
+                </div>
+            </div>
+
+            ${levelBar(ev.level)}
+
+            <div class="level-definition">
+                <strong style="color:#667eea;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;">
+                    Level ${ev.level} Definition
+                </strong><br>
+                <span style="font-size:13px;">${getLevelDefinition(ev.level)}</span>
+            </div>
+
+            <div class="metric-grid">
+                <div class="metric-box">
+                    <div class="metric-value">${ev.open_ended_count ?? '--'}</div>
+                    <div class="metric-label">Open-Ended</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">${ev.closed_count ?? '--'}</div>
+                    <div class="metric-label">Closed</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">${ev.total_questions ?? '--'}</div>
+                    <div class="metric-label">Total Qs</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value ${conf && conf < 60 ? 'flagged' : ''}">${conf ? conf + '%' : '--'}</div>
+                    <div class="metric-label">AI Confidence</div>
+                </div>
+            </div>
+
+            <div class="evidence-box ${isFlag ? 'flag' : ''}">
+                <div class="evidence-title">AI Justification</div>
+                <div class="evidence-text">${ev.justification || '--'}</div>
+            </div>
+
+            ${ev.open_ended_examples?.length ? `
+            <div class="evidence-box success">
+                <div class="evidence-title">Evidence — Questions Found in Transcript</div>
+                <ul class="quote-list">
+                    ${ev.open_ended_examples.slice(0,4).map(q => `<li>"${q}"</li>`).join('')}
+                </ul>
+            </div>` : ''}
+
+            <div class="grid-2" style="margin-top:12px;">
+                <div class="evidence-box success">
+                    <div class="evidence-title">Strengths</div>
+                    <div class="evidence-text">${ev.strengths || '--'}</div>
+                </div>
+                <div class="evidence-box ${isFlag ? 'flag' : ''}">
+                    <div class="evidence-title">Areas for Improvement</div>
+                    <div class="evidence-text">${ev.improvements || '--'}</div>
+                </div>
+            </div>
+
+            <div class="override-row">
+                <span class="override-label">Instructor Override:</span>
+                <select class="override-select" id="ovr-${sid}-${idx}">
+                    <option value="">Keep AI Score (Level ${ev.level})</option>
+                    <option value="1">Override to Level 1</option>
+                    <option value="2">Override to Level 2</option>
+                    <option value="3">Override to Level 3</option>
+                    <option value="4">Override to Level 4</option>
+                </select>
+                <button class="btn btn-secondary btn-sm" onclick="applyOverride('${sid}', ${idx})">Apply</button>
+                <span id="ovrNote-${sid}-${idx}" style="font-size:12px;color:#10b981;display:none;">Override applied</span>
+            </div>
+        </div>`;
+    }).join('');
+
+    document.getElementById('pEvaluations').innerHTML = html;
+}
+
+function applyOverride(sid, idx) {
+    const sel = document.getElementById(`ovr-${sid}-${idx}`);
+    const val = parseInt(sel.value);
+    if (!val) return;
+
+    studentData[sid].evaluations[idx].level = val;
+    studentData[sid].evaluations[idx].overridden = true;
+
+    const levels = studentData[sid].evaluations.map(e => e.level);
+    const avg = Math.round((levels.reduce((a,b) => a+b, 0) / levels.length) * 100) / 100;
+
+    if (studentData[sid].scores.domains?.['Communication']) {
+        studentData[sid].scores.domains['Communication'].score = avg;
+        studentData[sid].scores.domains['Communication'].clusters['Interview Communication'] = avg;
+    }
+    studentData[sid].scores.overall = avg;
+
+    const note = document.getElementById(`ovrNote-${sid}-${idx}`);
+    if (note) { note.style.display = 'inline'; setTimeout(() => note.style.display = 'none', 2000); }
+    setTimeout(() => initProfile(sid), 400);
+}
+</script>

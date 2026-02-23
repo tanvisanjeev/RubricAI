@@ -1,0 +1,143 @@
+<!-- About Page -->
+
+<div class="page-header">
+    <div class="page-title">About RubricAI</div>
+    <div class="page-subtitle">AI-powered evaluation platform for student interview assessment</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Project Overview</div>
+    <p style="color:#cbd5e1;font-size:14px;line-height:1.9;margin-bottom:16px;">
+        RubricAI evaluates student interview transcripts against a 34-indicator behavioral rubric. Built for CPS LEARN Lab at Northeastern University, it provides consistent, evidence-based scoring — replacing manual, subjective review with scalable AI-assisted assessment.
+    </p>
+    <p style="color:#cbd5e1;font-size:14px;line-height:1.9;">
+        The tool evaluates student communication, critical thinking, and professional agency skills as demonstrated in interview simulations. All evaluations are grounded in research-backed rubric criteria and validated by instructors.
+    </p>
+</div>
+
+<div class="card">
+    <div class="card-title">Scoring Logic and Methodology</div>
+    <div class="card-subtitle">How RubricAI calculates scores at every level</div>
+
+    <div class="hierarchy-flow" style="margin-bottom:20px;">
+        <div class="hierarchy-step active">Individual Indicator<br><span style="font-size:10px;color:#667eea;">Level 1–4</span></div>
+        <div class="hierarchy-arrow">→</div>
+        <div class="hierarchy-step active">Cluster Score<br><span style="font-size:10px;color:#667eea;">Avg of indicators</span></div>
+        <div class="hierarchy-arrow">→</div>
+        <div class="hierarchy-step active">Domain Score<br><span style="font-size:10px;color:#667eea;">Avg of clusters</span></div>
+        <div class="hierarchy-arrow">→</div>
+        <div class="hierarchy-step active">Overall Score<br><span style="font-size:10px;color:#667eea;">Avg of domains</span></div>
+    </div>
+
+    <div class="grid-2">
+        <div>
+            <div style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;margin-bottom:10px;">How Levels Are Set</div>
+            <div style="font-size:13px;color:#94a3b8;line-height:1.8;background:#0f172a;padding:14px;border-radius:8px;">
+                <div>1. Claude reads the rubric thresholds</div>
+                <div>2. Finds behavioral evidence in transcript</div>
+                <div>3. Matches evidence to Level 1, 2, 3, or 4</div>
+                <div>4. Returns score + confidence + quotes</div>
+                <div>5. Low confidence triggers instructor review</div>
+            </div>
+        </div>
+        <div>
+            <div style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;margin-bottom:10px;">Confidence Thresholds</div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+                <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#0f172a;border-radius:6px;border-left:3px solid #10b981;">
+                    <span style="font-size:12px;font-weight:700;color:#10b981;min-width:60px;">80–100%</span>
+                    <span style="font-size:12px;color:#94a3b8;">High — clear evidence found</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#0f172a;border-radius:6px;border-left:3px solid #f59e0b;">
+                    <span style="font-size:12px;font-weight:700;color:#f59e0b;min-width:60px;">60–79%</span>
+                    <span style="font-size:12px;color:#94a3b8;">Medium — some ambiguity</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#0f172a;border-radius:6px;border-left:3px solid #ef4444;">
+                    <span style="font-size:12px;font-weight:700;color:#ef4444;min-width:60px;">Below 60%</span>
+                    <span style="font-size:12px;color:#94a3b8;">Low — flagged for instructor</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-title">Technical Architecture</div>
+    <div class="grid-2">
+        <div>
+            <div style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;margin-bottom:10px;">Backend</div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+                <div style="padding:10px 14px;background:#0f172a;border-radius:6px;font-size:13px;color:#94a3b8;display:flex;justify-content:space-between;">
+                    <span>Language</span><span style="color:#f1f5f9;font-weight:600;">Python</span>
+                </div>
+                <div style="padding:10px 14px;background:#0f172a;border-radius:6px;font-size:13px;color:#94a3b8;display:flex;justify-content:space-between;">
+                    <span>Framework</span><span style="color:#f1f5f9;font-weight:600;">FastAPI</span>
+                </div>
+                <div style="padding:10px 14px;background:#0f172a;border-radius:6px;font-size:13px;color:#94a3b8;display:flex;justify-content:space-between;">
+                    <span>AI Engine</span><span style="color:#f1f5f9;font-weight:600;">Claude AI (Anthropic)</span>
+                </div>
+                <div style="padding:10px 14px;background:#0f172a;border-radius:6px;font-size:13px;color:#94a3b8;display:flex;justify-content:space-between;">
+                    <span>PDF Export</span><span style="color:#f1f5f9;font-weight:600;">ReportLab</span>
+                </div>
+                <div style="padding:10px 14px;background:#0f172a;border-radius:6px;font-size:13px;color:#94a3b8;display:flex;justify-content:space-between;">
+                    <span>Database</span><span style="color:#f1f5f9;font-weight:600;">SQLite</span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;margin-bottom:10px;">Frontend</div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+                <div style="padding:10px 14px;background:#0f172a;border-radius:6px;font-size:13px;color:#94a3b8;display:flex;justify-content:space-between;">
+                    <span>Structure</span><span style="color:#f1f5f9;font-weight:600;">HTML5</span>
+                </div>
+                <div style="padding:10px 14px;background:#0f172a;border-radius:6px;font-size:13px;color:#94a3b8;display:flex;justify-content:space-between;">
+                    <span>Styling</span><span style="color:#f1f5f9;font-weight:600;">CSS3</span>
+                </div>
+                <div style="padding:10px 14px;background:#0f172a;border-radius:6px;font-size:13px;color:#94a3b8;display:flex;justify-content:space-between;">
+                    <span>Logic</span><span style="color:#f1f5f9;font-weight:600;">Vanilla JavaScript</span>
+                </div>
+                <div style="padding:10px 14px;background:#0f172a;border-radius:6px;font-size:13px;color:#94a3b8;display:flex;justify-content:space-between;">
+                    <span>Deployment</span><span style="color:#f1f5f9;font-weight:600;">Vercel (planned)</span>
+                </div>
+                <div style="padding:10px 14px;background:#0f172a;border-radius:6px;font-size:13px;color:#94a3b8;display:flex;justify-content:space-between;">
+                    <span>Version Control</span><span style="color:#f1f5f9;font-weight:600;">GitHub</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-title">Development Roadmap</div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="padding:16px;background:#0f172a;border-radius:8px;border:1px solid #10b981;">
+            <div style="font-size:14px;font-weight:700;color:#10b981;">Phase 1 — Complete (February 2026)</div>
+            <div style="font-size:13px;color:#64748b;margin-top:4px;">Indicator 1 validated · Claude API integrated · Core architecture · Evidence-based scoring · Instructor override · CSV and PDF export</div>
+        </div>
+        <div style="padding:16px;background:#0f172a;border-radius:8px;border:1px solid #334155;">
+            <div style="font-size:14px;font-weight:700;color:#818cf8;">Phase 2 — March 2026</div>
+            <div style="font-size:13px;color:#64748b;margin-top:4px;">Full Communication domain · 10 indicators · Cluster scoring · Domain averages</div>
+        </div>
+        <div style="padding:16px;background:#0f172a;border-radius:8px;border:1px solid #334155;">
+            <div style="font-size:14px;font-weight:700;color:#c084fc;">Phase 3 — April 2026</div>
+            <div style="font-size:13px;color:#64748b;margin-top:4px;">Critical Thinking domain · 12 indicators · Hard indicator handling · Behavioral pattern detection</div>
+        </div>
+        <div style="padding:16px;background:#0f172a;border-radius:8px;border:1px solid #334155;">
+            <div style="font-size:14px;font-weight:700;color:#5eead4;">Phase 4 — May 2026</div>
+            <div style="font-size:13px;color:#64748b;margin-top:4px;">Professional Agency domain · 12 indicators · Full export suite · Vercel deployment · Complete dashboard</div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-title">Built By</div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;">
+        <div style="background:#0f172a;border:1px solid #334155;border-radius:8px;padding:16px 20px;flex:1;min-width:200px;">
+            <div style="font-size:14px;font-weight:700;color:#f1f5f9;margin-bottom:4px;">Tanvi Kadam</div>
+            <div style="font-size:12px;color:#64748b;">Developer · MS Applied Machine Intelligence<br>Northeastern University</div>
+        </div>
+        <div style="background:#0f172a;border:1px solid #334155;border-radius:8px;padding:16px 20px;flex:1;min-width:200px;">
+            <div style="font-size:14px;font-weight:700;color:#f1f5f9;margin-bottom:4px;">CPS LEARN Lab</div>
+            <div style="font-size:12px;color:#64748b;">Harry Son · Chris Unger · Allison Ruda<br>Northeastern University</div>
+        </div>
+    </div>
+</div>

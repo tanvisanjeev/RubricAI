@@ -1,0 +1,196 @@
+<!-- Upload Page -->
+
+<div class="page-header">
+    <div class="page-title">Upload and Evaluate</div>
+    <div class="page-subtitle">Upload student interview transcripts for AI-powered rubric evaluation</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Upload CSV File</div>
+    <div class="card-subtitle">Required columns: <strong>Student</strong>, <strong>Sim A Script</strong>, <strong>Sim B Script</strong></div>
+
+    <div class="upload-zone" id="dropZone">
+        <div style="font-size:14px;font-weight:600;color:#64748b;margin-bottom:8px;">Drop CSV file here or click to browse</div>
+        <div style="color:#475569;font-size:13px;">Supports CSV files from Joeys School or Cambiar Education</div>
+        <input type="file" id="fileInput" accept=".csv" style="display:none">
+    </div>
+
+    <div style="text-align:center;margin-top:4px;">
+        <button class="btn btn-lg" id="uploadBtn" disabled onclick="processUpload()">
+            Start AI Evaluation
+        </button>
+        <button class="btn btn-secondary btn-lg" onclick="loadDemoData()" style="margin-left:12px;">
+            Load Demo Data
+        </button>
+    </div>
+
+    <div id="progressSection" style="display:none;margin-top:24px;">
+        <div style="display:flex;justify-content:space-between;font-size:13px;color:#94a3b8;margin-bottom:6px;">
+            <span id="progressStatus">Analyzing transcripts with Claude AI...</span>
+            <span id="progressText">0%</span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <div id="statusMsg" style="margin-top:16px;"></div>
+</div>
+
+<!-- How Claude Evaluates -->
+<div class="card">
+    <div class="card-title">How Claude AI Evaluates</div>
+    <div class="flow-diagram">
+        <div class="flow-step">
+            <div class="flow-step-num">Input</div>
+            <div class="flow-step-text">Raw Transcript</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+            <div class="flow-step-num">Reads</div>
+            <div class="flow-step-text">Rubric File</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+            <div class="flow-step-num">Finds</div>
+            <div class="flow-step-text">Behaviors</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+            <div class="flow-step-num">Matches</div>
+            <div class="flow-step-text">Level 1–4</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+            <div class="flow-step-num">Returns</div>
+            <div class="flow-step-text">Score + Evidence</div>
+        </div>
+    </div>
+
+    <div class="alert alert-info mt-4">
+        No hardcoded prompts. Claude reads the rubric document directly and evaluates the transcript based on the criteria defined by Harry's rubric — not by pre-written instructions. This makes evaluations more accurate and adaptable.
+    </div>
+</div>
+
+<!-- Level Thresholds -->
+<div class="card">
+    <div class="card-title">Active Evaluation — Indicator 1</div>
+    <div class="card-subtitle">Asks clear, open-ended questions</div>
+
+    <div class="grid-2">
+        <div>
+            <div style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;margin-bottom:10px;">Level Thresholds</div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+                <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#0f172a;border-radius:6px;border-left:3px solid #ef4444;">
+                    <span class="badge badge-1">L1</span>
+                    <span style="font-size:13px;color:#94a3b8;">0–1 open-ended questions</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#0f172a;border-radius:6px;border-left:3px solid #f59e0b;">
+                    <span class="badge badge-2">L2</span>
+                    <span style="font-size:13px;color:#94a3b8;">2–3 open-ended questions</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#0f172a;border-radius:6px;border-left:3px solid #3b82f6;">
+                    <span class="badge badge-3">L3</span>
+                    <span style="font-size:13px;color:#94a3b8;">4–5 open-ended questions</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#0f172a;border-radius:6px;border-left:3px solid #10b981;">
+                    <span class="badge badge-4">L4</span>
+                    <span style="font-size:13px;color:#94a3b8;">6+ with strategic phrasing</span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;margin-bottom:10px;">What Claude Detects</div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+                <div style="padding:10px 14px;background:#0f172a;border-radius:6px;font-size:13px;color:#94a3b8;">
+                    Open-ended vs closed question count
+                </div>
+                <div style="padding:10px 14px;background:#0f172a;border-radius:6px;font-size:13px;color:#94a3b8;">
+                    Vague or leading phrasing
+                </div>
+                <div style="padding:10px 14px;background:#0f172a;border-radius:6px;font-size:13px;color:#94a3b8;">
+                    Strategic phrasing instances
+                </div>
+                <div style="padding:10px 14px;background:#0f172a;border-radius:6px;font-size:13px;color:#94a3b8;">
+                    Storytelling invitations
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function initUpload() {
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    if (!dropZone) return;
+
+    dropZone.addEventListener('click', () => fileInput.click());
+    dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('drop', e => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+    });
+    fileInput.addEventListener('change', e => {
+        if (e.target.files.length) handleFile(e.target.files[0]);
+    });
+}
+
+function handleFile(file) {
+    window._selectedFile = file;
+    document.getElementById('dropZone').innerHTML = `
+        <div style="font-size:15px;font-weight:600;margin-bottom:8px;color:#10b981;">${file.name}</div>
+        <div style="color:#64748b;font-size:13px;">${(file.size/1024).toFixed(1)} KB — Ready to evaluate</div>
+    `;
+    document.getElementById('uploadBtn').disabled = false;
+}
+
+async function processUpload() {
+    const file = window._selectedFile;
+    if (!file) return;
+
+    document.getElementById('uploadBtn').disabled = true;
+    document.getElementById('progressSection').style.display = 'block';
+    document.getElementById('statusMsg').innerHTML = '';
+
+    let prog = 0;
+    const iv = setInterval(() => {
+        prog = Math.min(prog + Math.random() * 10, 90);
+        document.getElementById('progressFill').style.width = prog + '%';
+        document.getElementById('progressText').textContent = Math.round(prog) + '%';
+    }, 400);
+
+    try {
+        const fd = new FormData();
+        fd.append('file', file);
+        const res = await fetch(`${API}/api/evaluate`, { method: 'POST', body: fd });
+        const data = await res.json();
+        clearInterval(iv);
+        document.getElementById('progressFill').style.width = '100%';
+        document.getElementById('progressText').textContent = '100%';
+
+        if (data.status === 'success') {
+            processAPIResponse(data);
+            setTimeout(() => loadPage('students'), 600);
+        } else {
+            showUploadStatus('error', data.message || 'Evaluation failed.');
+            document.getElementById('uploadBtn').disabled = false;
+        }
+    } catch(e) {
+        clearInterval(iv);
+        showUploadStatus('error', 'Cannot connect to backend. Make sure server is running on port 8000.');
+        document.getElementById('uploadBtn').disabled = false;
+    }
+}
+
+function showUploadStatus(type, msg) {
+    const styles = {
+        success: 'background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.3);color:#6ee7b7;',
+        error:   'background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);color:#fca5a5;'
+    };
+    document.getElementById('statusMsg').innerHTML =
+        `<div style="padding:12px 16px;border-radius:8px;font-size:13px;${styles[type]}">${msg}</div>`;
+}
+</script>

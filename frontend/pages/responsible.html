@@ -1,0 +1,145 @@
+<!-- Responsible AI Page -->
+
+<div class="page-header">
+    <div class="page-title">Responsible AI Use</div>
+    <div class="page-subtitle">How RubricAI ensures ethical, transparent, and fair evaluation of students</div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-label">Evidence Required</div>
+        <div class="stat-value" style="font-size:18px;padding-top:6px;">Every Score</div>
+        <div class="stat-meta">Backed by transcript quotes</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Human Oversight</div>
+        <div class="stat-value" style="font-size:18px;padding-top:6px;">Always</div>
+        <div class="stat-meta">Instructor reviews all scores</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Instructor Override</div>
+        <div class="stat-value" style="font-size:18px;padding-top:6px;">100%</div>
+        <div class="stat-meta">Instructor has final say</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">External Storage</div>
+        <div class="stat-value" style="font-size:18px;padding-top:6px;">None</div>
+        <div class="stat-meta">Data stays on your machine</div>
+    </div>
+</div>
+
+<div class="alert alert-success" style="font-size:14px;padding:16px 20px;">
+    Core Principle: AI assists the evaluation. Humans validate it. Harry's rubric governs both. No student is scored without evidence. No score is final without instructor review.
+</div>
+
+<!-- 6 Principles -->
+<div class="card">
+    <div class="card-title">6 Principles of Responsible Evaluation</div>
+
+    <div class="principle-card">
+        <div class="principle-icon">1</div>
+        <div>
+            <div class="principle-title">Evidence-Based Scoring</div>
+            <div class="principle-text">Every score is backed by actual quotes from the student's transcript. Claude never assigns a level without finding specific behavioral evidence. Instructors can see exactly what the AI found and why it scored the way it did. No black box decisions.</div>
+        </div>
+    </div>
+
+    <div class="principle-card">
+        <div class="principle-icon">2</div>
+        <div>
+            <div class="principle-title">Rubric-Governed Evaluation</div>
+            <div class="principle-text">All evaluations are grounded in Harry's published research-backed rubric — not AI judgment. Claude applies the rubric criteria defined by the research team. The rubric defines Level 1, 2, 3, and 4. Claude matches evidence to those definitions. Nothing is invented.</div>
+        </div>
+    </div>
+
+    <div class="principle-card">
+        <div class="principle-icon">3</div>
+        <div>
+            <div class="principle-title">Confidence Transparency</div>
+            <div class="principle-text">Claude returns a confidence score (0–100%) with every evaluation. Low confidence scores (below 60%) are automatically flagged in red for instructor review. The AI admits when it is uncertain — instructors are never left to trust a shaky evaluation without knowing it.</div>
+        </div>
+    </div>
+
+    <div class="principle-card">
+        <div class="principle-icon">4</div>
+        <div>
+            <div class="principle-title">Instructor Override</div>
+            <div class="principle-text">Every single AI score can be overridden by the instructor. When an override is applied, it is logged and marked clearly in the student profile. The AI is a tool to assist — not replace — professional educator judgment. Instructors always have the final word.</div>
+        </div>
+    </div>
+
+    <div class="principle-card">
+        <div class="principle-icon">5</div>
+        <div>
+            <div class="principle-title">Data Privacy</div>
+            <div class="principle-text">Student transcript data is processed locally on your machine. No student data is stored in external databases or shared with third parties. Transcripts are sent to Claude AI for evaluation only — Anthropic's API follows strict data privacy policies. Exports are downloaded directly to your computer.</div>
+        </div>
+    </div>
+
+    <div class="principle-card">
+        <div class="principle-icon">6</div>
+        <div>
+            <div class="principle-title">Consistency and Fairness</div>
+            <div class="principle-text">Every student is evaluated against the exact same rubric criteria, by the same AI model, with the same evaluation process. This eliminates evaluator fatigue, inconsistency, and bias that can occur in manual review of hundreds of transcripts. All students get the same standard of evaluation.</div>
+        </div>
+    </div>
+</div>
+
+<!-- Hard vs Easy Indicators -->
+<div class="card">
+    <div class="card-title">Handling Hard vs Easy Indicators</div>
+    <div class="card-subtitle">Not all indicators are equal — RubricAI adapts its approach</div>
+
+    <div class="grid-2">
+        <div>
+            <div style="font-size:12px;font-weight:700;color:#10b981;text-transform:uppercase;margin-bottom:12px;">Easy Indicators — Countable</div>
+            <div style="background:#0f172a;border-radius:8px;padding:16px;border:1px solid #334155;">
+                <div style="font-size:13px;color:#94a3b8;line-height:1.8;">
+                    <div style="margin-bottom:8px;">Example: <strong style="color:#f1f5f9;">Asks open-ended questions</strong></div>
+                    <div>Count open-ended vs closed questions</div>
+                    <div>Match count to rubric threshold</div>
+                    <div>High confidence, clear evidence</div>
+                    <div>AI scores reliably</div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div style="font-size:12px;font-weight:700;color:#f59e0b;text-transform:uppercase;margin-bottom:12px;">Hard Indicators — Behavioral</div>
+            <div style="background:#0f172a;border-radius:8px;padding:16px;border:1px solid #334155;">
+                <div style="font-size:13px;color:#94a3b8;line-height:1.8;">
+                    <div style="margin-bottom:8px;">Example: <strong style="color:#f1f5f9;">Active listening · Rapport building</strong></div>
+                    <div>Detect behavioral patterns in transcript</div>
+                    <div>Look for paraphrasing, callbacks, tone</div>
+                    <div>Lower confidence — auto-flagged</div>
+                    <div>Instructor reviews and validates</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-warning mt-4">
+        Hard indicators are always flagged for human review when confidence is low. The AI provides its best assessment with evidence, but defers to instructor judgment on qualitative behavioral indicators.
+    </div>
+</div>
+
+<!-- AI Disclosure -->
+<div class="card">
+    <div class="card-title">AI Disclosure Statement</div>
+    <div style="background:#0f172a;border-radius:8px;padding:20px;border:1px solid #334155;font-size:13px;color:#94a3b8;line-height:1.9;">
+        <p style="margin-bottom:12px;">
+            <strong style="color:#f1f5f9;">AI Model Used:</strong> Claude Sonnet (Anthropic) — a large language model trained for complex reasoning and analysis tasks.
+        </p>
+        <p style="margin-bottom:12px;">
+            <strong style="color:#f1f5f9;">How It Evaluates:</strong> Claude reads the rubric document provided by the research team and evaluates student transcripts against the defined behavioral criteria. It does not use pre-written instructions about what to look for — the rubric itself governs all evaluations.
+        </p>
+        <p style="margin-bottom:12px;">
+            <strong style="color:#f1f5f9;">What It Cannot Do:</strong> Claude cannot assess tone of voice, body language, or non-verbal communication. It evaluates text-based transcripts only. Hard behavioral indicators require instructor validation.
+        </p>
+        <p style="margin-bottom:12px;">
+            <strong style="color:#f1f5f9;">Data Handling:</strong> Transcripts are sent to Anthropic's API for processing. No student data is permanently stored by the AI. Anthropic's data usage policies apply.
+        </p>
+        <p>
+            <strong style="color:#f1f5f9;">Final Authority:</strong> All AI scores are advisory. Instructors at CPS LEARN Lab retain full authority to review, modify, or override any evaluation before it is used in research or shared with partner schools.
+        </p>
+    </div>
+</div>

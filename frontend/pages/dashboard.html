@@ -1,0 +1,170 @@
+<!-- Dashboard Page -->
+
+<div class="page-header">
+    <div class="page-title">Welcome to RubricAI</div>
+    <div class="page-subtitle">AI-powered student interview evaluation platform for CPS LEARN Lab</div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-label">Students Evaluated</div>
+        <div class="stat-value" id="dashStudents">0</div>
+        <div class="stat-meta">Total in system</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Active Indicator</div>
+        <div class="stat-value">1</div>
+        <div class="stat-meta">of 34 total</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">AI Engine</div>
+        <div class="stat-value" style="font-size:18px;padding-top:6px;">Claude</div>
+        <div class="stat-meta">Anthropic Sonnet</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Needs Review</div>
+        <div class="stat-value" id="dashReview">0</div>
+        <div class="stat-meta">Flagged evaluations</div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="card">
+    <div class="card-title">Quick Actions</div>
+    <div class="btn-group">
+        <button class="btn btn-lg" onclick="loadPage('upload')">Upload Transcripts</button>
+        <button class="btn btn-secondary btn-lg" onclick="loadDemoData()">Load Demo Data</button>
+        <button class="btn btn-outline btn-lg" onclick="loadPage('students')">View Students</button>
+        <button class="btn btn-outline btn-lg" onclick="loadPage('rubric')">Rubric Framework</button>
+        <button class="btn btn-outline btn-lg" onclick="loadPage('responsible')">Responsible AI</button>
+    </div>
+</div>
+
+<!-- How It Works -->
+<div class="card">
+    <div class="card-title">How RubricAI Works</div>
+    <div class="flow-diagram">
+        <div class="flow-step">
+            <div class="flow-step-num">Step 1</div>
+            <div class="flow-step-text">Upload CSV</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+            <div class="flow-step-num">Step 2</div>
+            <div class="flow-step-text">AI Reads Rubric</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+            <div class="flow-step-num">Step 3</div>
+            <div class="flow-step-text">Evaluates Transcript</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+            <div class="flow-step-num">Step 4</div>
+            <div class="flow-step-text">Assigns Level 1–4</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+            <div class="flow-step-num">Step 5</div>
+            <div class="flow-step-text">Evidence + Score</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+            <div class="flow-step-num">Step 6</div>
+            <div class="flow-step-text">Instructor Reviews</div>
+        </div>
+    </div>
+    <div class="alert alert-info mt-4">
+        <span>Note:</span>
+        <span>Claude AI reads Harry's rubric document directly — no hardcoded prompts. The rubric defines the thresholds. Claude applies them. Instructors validate.</span>
+    </div>
+</div>
+
+<!-- Scoring Hierarchy -->
+<div class="card">
+    <div class="card-title">Scoring Hierarchy</div>
+    <div class="card-subtitle">Every student receives scores at 4 levels of granularity</div>
+
+    <div class="hierarchy-flow">
+        <div class="hierarchy-step active">
+            Individual Indicator<br>
+            <span style="font-size:10px;color:#667eea;">Level 1–4</span>
+        </div>
+        <div class="hierarchy-arrow">→</div>
+        <div class="hierarchy-step active">
+            Cluster Score<br>
+            <span style="font-size:10px;color:#667eea;">Avg of indicators</span>
+        </div>
+        <div class="hierarchy-arrow">→</div>
+        <div class="hierarchy-step active">
+            Domain Score<br>
+            <span style="font-size:10px;color:#667eea;">Avg of clusters</span>
+        </div>
+        <div class="hierarchy-arrow">→</div>
+        <div class="hierarchy-step active">
+            Overall Score<br>
+            <span style="font-size:10px;color:#667eea;">Avg of domains</span>
+        </div>
+    </div>
+
+    <div class="grid-3 mt-4">
+        <div class="domain-box">
+            <div class="domain-name">Communication</div>
+            <div style="font-size:13px;color:#94a3b8;margin-top:4px;">10 indicators · 2 clusters</div>
+        </div>
+        <div class="domain-box">
+            <div class="domain-name">Critical Thinking</div>
+            <div style="font-size:13px;color:#94a3b8;margin-top:4px;">12 indicators · 3 clusters</div>
+        </div>
+        <div class="domain-box">
+            <div class="domain-name">Professional Agency</div>
+            <div style="font-size:13px;color:#94a3b8;margin-top:4px;">12 indicators · 3 clusters</div>
+        </div>
+    </div>
+</div>
+
+<!-- Roadmap -->
+<div class="card">
+    <div class="card-title">Development Roadmap</div>
+    <div class="grid-2">
+        <div>
+            <div style="display:flex;align-items:center;gap:10px;padding:12px;background:#0f172a;border-radius:8px;margin-bottom:8px;border:1px solid #10b981;">
+                <div>
+                    <div style="font-size:13px;font-weight:700;color:#10b981;">Phase 1 — Complete</div>
+                    <div style="font-size:12px;color:#64748b;">Indicator 1 validated · Claude API · Core architecture</div>
+                </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:12px;background:#0f172a;border-radius:8px;margin-bottom:8px;border:1px solid #334155;">
+                <div>
+                    <div style="font-size:13px;font-weight:700;color:#818cf8;">Phase 2 — March</div>
+                    <div style="font-size:12px;color:#64748b;">Communication domain · 10 indicators</div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div style="display:flex;align-items:center;gap:10px;padding:12px;background:#0f172a;border-radius:8px;margin-bottom:8px;border:1px solid #334155;">
+                <div>
+                    <div style="font-size:13px;font-weight:700;color:#c084fc;">Phase 3 — April</div>
+                    <div style="font-size:12px;color:#64748b;">Critical Thinking · 12 indicators</div>
+                </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:12px;background:#0f172a;border-radius:8px;margin-bottom:8px;border:1px solid #334155;">
+                <div>
+                    <div style="font-size:13px;font-weight:700;color:#5eead4;">Phase 4 — May</div>
+                    <div style="font-size:12px;color:#64748b;">Professional Agency · Full export · Deploy</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function initDashboard() {
+    const students = Object.values(studentData);
+    document.getElementById('dashStudents').textContent = students.length;
+    const flagged = students.filter(s =>
+        s.evaluations.some(e => e.level === 1 || (e.confidence && e.confidence < 0.6))
+    );
+    document.getElementById('dashReview').textContent = flagged.length;
+}
+</script>
